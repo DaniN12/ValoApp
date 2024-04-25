@@ -17,6 +17,7 @@ public class Administrador extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton crearEliminar, modificar, ascender;
+	private JButton temporal;
 
 	/**
 	 * Launch the application.
@@ -67,29 +68,37 @@ public class Administrador extends JFrame implements ActionListener {
 		ascender.setBounds(114, 218, 144, 21);
 		contentPane.add(ascender);
 		
+		temporal = new JButton("Jugador");
+		temporal.setBounds(504, 56, 85, 21);
+		contentPane.add(temporal);
+		
 		crearEliminar.addActionListener(this);
 		modificar.addActionListener(this);
 		ascender.addActionListener(this);
+		temporal.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object ce = e.getSource();
-		Object m = e.getSource();
-		Object a = e.getSource();
-		if(ce==crearEliminar) {
+		Object o = e.getSource();
+		if(o==crearEliminar) {
 			CrearEliminar eleccion = new CrearEliminar();
 			eleccion.setVisible(true);
 			dispose();
 		}
-		if(m==modificar) {
+		if(o==modificar) {
 			Modificar modify = new Modificar();
 			modify.setVisible(true);
 			dispose();
 		}
-		if(a==ascender) {
+		if(o==ascender) {
 			Ascender ascenso = new Ascender();
 			ascenso.setVisible(true);
+			dispose();
+		}
+		if(o==temporal) {
+			Jugador tenporal =new Jugador();
+			tenporal.setVisible(true);
 			dispose();
 		}
 		

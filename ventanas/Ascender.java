@@ -10,11 +10,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JTable;
 
 public class Ascender extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JTable informacion;
+	private JButton guardar;
 
 	/**
 	 * Launch the application.
@@ -44,22 +47,38 @@ public class Ascender extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Elige el usuario:");
-		lblNewLabel.setBounds(85, 91, 123, 13);
-		contentPane.add(lblNewLabel);
+		JLabel labelUsuario = new JLabel("Elige el usuario:");
+		labelUsuario.setBounds(85, 91, 123, 13);
+		contentPane.add(labelUsuario);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(192, 87, 123, 17);
+		comboBox.setBounds(200, 89, 123, 17);
 		contentPane.add(comboBox);
 		
-		JButton btnNewButton = new JButton("Ascender");
-		btnNewButton.setBounds(280, 295, 85, 21);
-		contentPane.add(btnNewButton);
+		guardar = new JButton("Ascender y volver");
+		guardar.setBounds(243, 320, 156, 21);
+		contentPane.add(guardar);
+		
+		informacion = new JTable();
+		informacion.setBounds(243, 142, 156, 84);
+		contentPane.add(informacion);
+		
+		JLabel labelInfo = new JLabel("Informacion del usuarion:");
+		labelInfo.setBounds(88, 143, 145, 13);
+		contentPane.add(labelInfo);
+		
+		guardar.addActionListener(this);
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		Object g = e.getSource();
+		if(g==guardar) {
+			Administrador volver = new Administrador();
+			volver.setVisible(true);
+			dispose();
+		}
 		
 	}
 }

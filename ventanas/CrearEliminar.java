@@ -58,14 +58,13 @@ public class CrearEliminar extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object c = e.getSource();
-		Object el = e.getSource();
-		if(c==crear) {
+		Object a = e.getSource();
+		if(a==crear) {
 			Crear crea = new Crear();
 			crea.setVisible(true);
 			dispose();
 		}
-		if(el==eliminar) {
+		if(a==eliminar) {
 			Eliminar elimina = new Eliminar();
 			elimina.setVisible(true);
 			dispose();

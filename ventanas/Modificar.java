@@ -21,6 +21,7 @@ public class Modificar extends JFrame implements ActionListener {
 	private JLabel modPartida,mapas,fechaPartida;
 	private JDateChooser dateChooser;
 	private JButton comprobar;
+	private JButton guardar;
 
 	/**
 	 * Launch the application.
@@ -79,16 +80,22 @@ public class Modificar extends JFrame implements ActionListener {
 		dateChooser.setBounds(172, 253, 126, 19);
 		contentPane.add(dateChooser);
 		
+		guardar = new JButton("Guardar y volver");
+		guardar.setBounds(302, 341, 123, 21);
+		contentPane.add(guardar);
+		
 		mapSeleccion.setVisible(false);
 		fechaPartida.setVisible(false);
 		dateChooser.setVisible(false);
 		mapas.setVisible(false);
 		
 		comprobar.addActionListener(this);
+		guardar.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+		Object g = e.getSource();
 		if (o == comprobar) {
 	        JOptionPane.showMessageDialog(this,(String)"Esta partida ha sido jugada","Error",JOptionPane.INFORMATION_MESSAGE);
 			mapSeleccion.setVisible(true);
@@ -96,6 +103,10 @@ public class Modificar extends JFrame implements ActionListener {
 			dateChooser.setVisible(true);
 			mapas.setVisible(true);
 		}
-		
+		if(g==guardar) {
+			Administrador volver = new Administrador();
+			volver.setVisible(true);
+			dispose();
+		}
 	}
 }
