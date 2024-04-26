@@ -1,18 +1,18 @@
 package model;
 
 public class Coleccion {
-	private int coleccion_id;
+	private int coleccion_ID;
 	private String armaFav;
 	private String skinFav;
 	private String agenteFav;
-	private int dni_Jugadror;
+	private int dni_jugadror;
 	
 	
 	public int getColeccion_id() {
-		return coleccion_id;
+		return coleccion_ID;
 	}
 	public void setColeccion_id(int coleccion_id) {
-		this.coleccion_id = coleccion_id;
+		this.coleccion_ID = coleccion_id;
 	}
 	public String getArmaFav() {
 		return armaFav;
@@ -33,10 +33,10 @@ public class Coleccion {
 		this.agenteFav = agenteFav;
 	}
 	public int getDni_Jugadror() {
-		return dni_Jugadror;
+		return dni_jugadror;
 	}
 	public void setDni_Jugadror(int dni_Jugadror) {
-		this.dni_Jugadror = dni_Jugadror;
+		this.dni_jugadror = dni_Jugadror;
 	}
 	
 	

@@ -9,7 +9,7 @@ public class Usuario {
 	private String username;
 	private String contrasena;
 	private String sexo;
-	private LocalDate nacimiento;
+	private LocalDate fecha_nac;
 	private boolean esAdmin;
 	
 	
@@ -51,10 +51,10 @@ public class Usuario {
 		this.sexo = sexo;
 	}
 	public LocalDate getNacimiento() {
-		return nacimiento;
+		return fecha_nac;
 	}
 	public void setNacimiento(LocalDate nacimiento) {
-		this.nacimiento = nacimiento;
+		this.fecha_nac = nacimiento;
 	}
 	public boolean isEsAdmin() {
 		return esAdmin;
