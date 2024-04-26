@@ -1,6 +1,6 @@
 package model;
 
-import java.time.*;
+import java.sql.Date;
 
 public class Usuario {
 	private String dni;
@@ -9,7 +9,7 @@ public class Usuario {
 	private String username;
 	private String contrasena;
 	private String sexo;
-	private LocalDate fecha_nac;
+	private Date fecha_nac;
 	private boolean esAdmin;
 	
 	
@@ -50,10 +50,10 @@ public class Usuario {
 	public void setSexo(String sexo) {
 		this.sexo = sexo;
 	}
-	public LocalDate getNacimiento() {
+	public Date getNacimiento() {
 		return fecha_nac;
 	}
-	public void setNacimiento(LocalDate nacimiento) {
+	public void setNacimiento(Date nacimiento) {
 		this.fecha_nac = nacimiento;
 	}
 	public boolean isEsAdmin() {
