@@ -52,10 +52,6 @@ public class Administrador extends JFrame implements ActionListener {
 		lblNewLabel.setBounds(211, 44, 101, 41);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("Administrador");
-		lblNewLabel_1.setBounds(296, 60, 84, 13);
-		contentPane.add(lblNewLabel_1);
-		
 		crearEliminar = new JButton("Crear/Eliminar partida");
 		crearEliminar.setBounds(114, 156, 144, 21);
 		contentPane.add(crearEliminar);

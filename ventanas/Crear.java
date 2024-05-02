@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JButton;
@@ -17,8 +18,10 @@ public class Crear extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JButton guardar;
+	private JTextField crearPartida;
+	private JButton guardar,volver;
+	private JDateChooser dateChooser;
+	private JComboBox mapa;
 
 	/**
 	 * Launch the application.
@@ -48,18 +51,18 @@ public class Crear extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(249, 53, 134, 19);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		crearPartida = new JTextField();
+		crearPartida.setBounds(249, 53, 134, 19);
+		contentPane.add(crearPartida);
+		crearPartida.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Introduce la nueva partida:");
 		lblNewLabel.setBounds(49, 56, 154, 13);
 		contentPane.add(lblNewLabel);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(218, 123, 107, 21);
-		contentPane.add(comboBox);
+		mapa = new JComboBox();
+		mapa.setBounds(218, 123, 107, 21);
+		contentPane.add(mapa);
 		
 		JLabel lblNewLabel_1 = new JLabel("Elije el mapa:");
 		lblNewLabel_1.setBounds(49, 127, 86, 13);
@@ -69,22 +72,36 @@ public class Crear extends JFrame implements ActionListener {
 		lblNewLabel_2.setBounds(49, 213, 122, 13);
 		contentPane.add(lblNewLabel_2);
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd/MM/yyyy");
 		dateChooser.setBounds(223, 213, 102, 19);
 		contentPane.add(dateChooser);
 		
-		guardar = new JButton("Guardar y volver");
-		guardar.setBounds(251, 309, 132, 21);
+		guardar = new JButton("Crear Partida");
+		guardar.setBounds(49, 309, 132, 21);
 		contentPane.add(guardar);
 		
+		volver = new JButton("volver");
+		volver.setBounds(412, 309, 85, 21);
+		contentPane.add(volver);
+		
+		volver.setVisible(false);
+		
 		guardar.addActionListener(this);
+		volver.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object g = e.getSource();
 		if(g==guardar) {
+			JOptionPane.showMessageDialog(this,(String)"Partida creada con exito","Creado",JOptionPane.INFORMATION_MESSAGE);
+			crearPartida.setText("");
+			dateChooser.setCalendar(null);
+			volver.setVisible(true);
+		}
+			
+		if(g==volver) {
 			Administrador volver = new Administrador();
 			volver.setVisible(true);
 			dispose();
