@@ -8,12 +8,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
+import javax.swing.JButton;
 
 public class VerPartida extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable table;
+	private JTable infoPartidas;
+	private JButton volver;
 
 	/**
 	 * Launch the application.
@@ -43,14 +45,24 @@ public class VerPartida extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		table = new JTable();
-		table.setBounds(64, 22, 537, 335);
-		contentPane.add(table);
+		infoPartidas = new JTable();
+		infoPartidas.setBounds(64, 22, 537, 335);
+		contentPane.add(infoPartidas);
+		
+		volver = new JButton("Volver");
+		volver.setBounds(321, 367, 85, 21);
+		contentPane.add(volver);
+		
+		volver.addActionListener(this);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		Object j = e.getSource();
+		if(j==volver) {
+			Jugador jugar = new Jugador();
+			jugar.setVisible(true);
+			dispose();
+		}
 	}
 }

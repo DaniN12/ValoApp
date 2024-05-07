@@ -15,6 +15,7 @@ public class Coleccion extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JButton guardar;
 
 	/**
 	 * Launch the application.
@@ -68,14 +69,22 @@ public class Coleccion extends JFrame implements ActionListener {
 		labelSkin.setBounds(317, 150, 94, 13);
 		contentPane.add(labelSkin);
 		
-		JButton guardar = new JButton("Guardar");
-		guardar.setBounds(297, 328, 85, 21);
+		guardar = new JButton("Guardar y volver");
+		guardar.setBounds(297, 328, 141, 21);
 		contentPane.add(guardar);
+		
+		guardar.addActionListener(this);
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		Object o = e.getSource();
+		if(o == guardar) {
+			Jugador jugar = new Jugador();
+			jugar.setVisible(true);
+			dispose();
+		}
 		
 	}
 

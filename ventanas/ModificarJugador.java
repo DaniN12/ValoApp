@@ -55,19 +55,19 @@ public class ModificarJugador extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(103, 141, 45, 13);
+		lblNombre.setBounds(103, 141, 62, 13);
 		contentPane.add(lblNombre);
 		
 		JLabel lblApellido = new JLabel("Apellido: ");
-		lblApellido.setBounds(103, 164, 45, 13);
+		lblApellido.setBounds(103, 164, 62, 13);
 		contentPane.add(lblApellido);
 		
 		JLabel lblUsuario = new JLabel("Usuario: ");
-		lblUsuario.setBounds(103, 187, 45, 13);
+		lblUsuario.setBounds(103, 187, 62, 13);
 		contentPane.add(lblUsuario);
 		
 		JLabel lblContrasena = new JLabel("Contraseña: ");
-		lblContrasena.setBounds(292, 164, 59, 13);
+		lblContrasena.setBounds(292, 164, 75, 13);
 		contentPane.add(lblContrasena);
 		
 		JLabel lblSexo = new JLabel("Sexo: ");
@@ -75,59 +75,59 @@ public class ModificarJugador extends JFrame implements ActionListener {
 		contentPane.add(lblSexo);
 		
 		nombre = new JTextField();
-		nombre.setBounds(149, 138, 96, 19);
+		nombre.setBounds(162, 138, 96, 19);
 		contentPane.add(nombre);
 		nombre.setColumns(10);
 		
 		apellido = new JTextField();
 		apellido.setColumns(10);
-		apellido.setBounds(149, 161, 96, 19);
+		apellido.setBounds(162, 161, 96, 19);
 		contentPane.add(apellido);
 		
 		usuario = new JTextField();
 		usuario.setColumns(10);
-		usuario.setBounds(149, 184, 96, 19);
+		usuario.setBounds(162, 184, 96, 19);
 		contentPane.add(usuario);
 		
 		contrasena = new JPasswordField();
-		contrasena.setBounds(358, 162, 89, 16);
+		contrasena.setBounds(377, 162, 89, 16);
 		contentPane.add(contrasena);
 		
 		JLabel lblConfirmarContrasena = new JLabel("Confirmar contraseña: ");
-		lblConfirmarContrasena.setBounds(292, 187, 118, 13);
+		lblConfirmarContrasena.setBounds(292, 187, 133, 13);
 		contentPane.add(lblConfirmarContrasena);
 		
 		confirmarContrasena = new JPasswordField();
-		confirmarContrasena.setBounds(409, 185, 89, 16);
+		confirmarContrasena.setBounds(430, 185, 89, 16);
 		contentPane.add(confirmarContrasena);
 		
 		JRadioButton rbHombre = new JRadioButton("HOMBRE");
-		rbHombre.setBounds(142, 218, 71, 21);
+		rbHombre.setBounds(152, 218, 81, 21);
 		contentPane.add(rbHombre);
 		
 		JRadioButton rbMujer = new JRadioButton("MUJER");
-		rbMujer.setBounds(215, 218, 56, 21);
+		rbMujer.setBounds(234, 218, 70, 21);
 		contentPane.add(rbMujer);
 		
 		JRadioButton rbOtro = new JRadioButton("Otro:");
-		rbOtro.setBounds(273, 218, 50, 21);
+		rbOtro.setBounds(305, 218, 62, 21);
 		contentPane.add(rbOtro);
 		
 		genero = new JTextField();
-		genero.setBounds(329, 219, 96, 19);
+		genero.setBounds(370, 219, 96, 19);
 		contentPane.add(genero);
 		genero.setColumns(10);
 		
-		btContinuar = new JButton("Continuar");
+		btContinuar = new JButton("Guardar y volver");
 		btContinuar.setBounds(245, 316, 167, 21);
 		contentPane.add(btContinuar);
 		
 		JLabel lblNewLabel = new JLabel("Contraseña actual:");
-		lblNewLabel.setBounds(292, 141, 101, 13);
+		lblNewLabel.setBounds(292, 141, 118, 13);
 		contentPane.add(lblNewLabel);
 		
 		antiguo = new JPasswordField();
-		antiguo.setBounds(379, 138, 89, 16);
+		antiguo.setBounds(430, 139, 89, 16);
 		contentPane.add(antiguo);
 		
 		btContinuar.addActionListener(this);
@@ -135,8 +135,8 @@ public class ModificarJugador extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == btContinuar) {
-			Login login = new Login();
-			login.setVisible(true);
+			Jugador jugar = new Jugador();
+			jugar.setVisible(true);
 			dispose();
 		}
 	}
