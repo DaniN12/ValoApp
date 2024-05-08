@@ -14,7 +14,7 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Registro extends JFrame implements ActionListener {
+public class RegistroView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -34,7 +34,7 @@ public class Registro extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Registro frame = new Registro();
+					RegistroView frame = new RegistroView();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,7 +46,7 @@ public class Registro extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Registro() {
+	public RegistroView() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 433);
 		contentPane = new JPanel();
@@ -147,7 +147,7 @@ public class Registro extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == btContinuar) {
-			Login login = new Login();
+			LoginView login = new LoginView();
 			login.setVisible(true);
 			dispose();
 		}

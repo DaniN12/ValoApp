@@ -17,7 +17,7 @@ public class ConnectionOpenClose {
 
 	// CONSTRUCTOR
 	public ConnectionOpenClose() {
-		configFile = ResourceBundle.getBundle("modelo.config");
+		configFile = ResourceBundle.getBundle("resources.Config");
 		url = configFile.getString("URL");
 		user = configFile.getString("USER");
 		pass = configFile.getString("PASSWORD");
