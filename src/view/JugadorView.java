@@ -79,9 +79,9 @@ public class JugadorView extends JDialog implements ActionListener {
 	private JLabel lblSexoMod;	
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_4;
-	private JComboBox comboBoxArma;
-	private JComboBox comboBoxSkinFav;
-	private JComboBox comboBoxAgente;
+	private JComboBox<String> comboBoxArma;
+	private JComboBox<String> comboBoxSkinFav;
+	private JComboBox<String> comboBoxAgente;
 	private JButton btnGuardarColec;
 	private JRadioButton rdbtnMasculino;
 	private JRadioButton rdbtnFemenino;
@@ -98,7 +98,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		panelPartidas.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
-		// 1.Battles View
+		// 1.Info View
 		panelInfo.setBackground(new Color(192, 192, 192));
 		pestanas.addTab("INFO", panelInfo);
 
@@ -204,7 +204,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblFondoLabo.setBounds(0, 0, 1061, 543);
 		panelInfo.add(lblFondoLabo);
 
-		// 2.Delete View
+		// 2.Colección View
 
 		pestanas.addTab("COLECCIÓN", panelColección);
 		panelColección.setLayout(null);
@@ -213,8 +213,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		deleteMessage.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
 		deleteMessage.setBounds(27, 26, 337, 17);
 		panelColección.add(deleteMessage);
-
-		// Pestaña3
+ 
 		agenteImagen = new JLabel("sgdssgfghgf");
 		agenteImagen.setBounds(64, 183, 205, 149);
 		panelColección.add(agenteImagen);
@@ -245,15 +244,15 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblSkinFavColec.setBounds(831, 91, 133, 24);
 		panelColección.add(lblSkinFavColec);
 
-		comboBoxAgente = new JComboBox();
+		comboBoxAgente = new JComboBox<String>();
 		comboBoxAgente.setBounds(81, 125, 168, 34);
 		panelColección.add(comboBoxAgente);
 
-		comboBoxArma = new JComboBox();
+		comboBoxArma = new JComboBox<String>();
 		comboBoxArma.setBounds(456, 125, 168, 34);
 		panelColección.add(comboBoxArma);
 
-		comboBoxSkinFav = new JComboBox();
+		comboBoxSkinFav = new JComboBox<String>();
 		comboBoxSkinFav.setBounds(824, 125, 168, 34);
 		panelColección.add(comboBoxSkinFav);
 
@@ -379,7 +378,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblNewLabel_2.setBounds(0, 0, 1061, 543);
 		panelModificar.add(lblNewLabel_2);
 
-		// Pestaña4
+		// Partidas View
 		pestanas.addTab("PARTIDAS", panelPartidas);
 		panelPartidas.setLayout(null);
 
@@ -400,10 +399,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		panelPartidas.add(lblNewLabel_3);
 
 		getContentPane().add(pestanas);
-		// Using @param name = null because I want all
-		// trainers to be added and none to be removed
-
-		// Configuramos la ventana
+		
 
 		setSize(1080, 607);
 	}
@@ -416,4 +412,24 @@ public class JugadorView extends JDialog implements ActionListener {
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+	
+	/*private void setPersonalInfo() {
+		textFieldUsuario.setText(String.valueOf(usuario.getTrainerID()));
+		textFieldNombreMod.setText(usuario.getName());
+		textFieldApellidoMod.setText(usuario.getOriginCity());
+		ageCalender.setDate(trainer.getBirthdate());
+		textGender.setText(trainer.getGender());
+		textBadges.setText(String.valueOf(trainer.getBadges()));
+	}
+
+	private void updateTrainer() {
+		java.sql.Date date = new java.sql.Date(ageCalender.getDate().toInstant().toEpochMilli());
+
+		trainer.setName(textName.getText());
+		trainer.setBirthdate(date);
+		trainer.setGender(textGender.getText());
+		trainer.setOriginCity(textOrigin.getText());
+		trainer.setBadges(Integer.parseInt(textBadges.getText()));
+
+	}*/
 }
