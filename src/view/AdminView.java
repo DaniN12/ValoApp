@@ -3,252 +3,203 @@ package view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
-
-import view.JugadorView;
-
 import com.toedter.calendar.JDateChooser;
-
-
-import model.MyException;
+import controller.Controlador;
+import excepciones.CreateException;
+import model.Usuario;
 
 public class AdminView extends JDialog implements ActionListener {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
-	private JTextArea resulttextField;
-	private JButton teamButton;
-	private JButton informationButton;
+	private JTextArea tfInformacion;
+	private JButton btnBanear;
+	private JButton btnRevisar;
 	private JButton btnGuardarModi;
 	private JButton upgradeButton;
 	private JDateChooser addCalender;
-	private JComboBox<String> trainersComboBox;
-	private JComboBox<String> comoBoxAscenderJugador;
-	private DefaultTableModel tableModel;
-	private DefaultTableModel tableModel2;
+	private JComboBox<String> cbJugadorBan;
+	private JComboBox<String> cbJugadorAscender;
 	private JPanel panelBattle;
-	private JPanel paneDelete;
+	private JPanel paneCrearPartida;
 	private JPanel panelModify;
 	private JPanel panelAscend;
 	private JLabel lblFondoCrear;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	private JLabel lblFondoLabo;
+	private JLabel lblFondoBaneo;
 	private JLabel lblMapa;
 	private JLabel lblFecha;
-	private JLabel lblIntroducirNombreParti;
-	private JLabel lblSelecMapa;
-	private JLabel lblSelecFechaPartida;
-	private JTextField textFieldNombrePartida;
-
+	private JLabel lblNombreParti;
+	private JLabel lblSeleccionaMapa;
+	private JLabel lblFechaPartida;
+	private JTextField tfNombrePartida;
+	private JComboBox<String> cbJugadorEq1;
+	private JComboBox<String> cbJugadorEq2;
+	private JComboBox<String> cbMapaCrear;
+	private JComboBox<Integer> cbPartidaMod;
+	private JComboBox<String> cbMapaMod;
+	private ArrayList<Usuario> jugadores;
+	private String[] mapas = { "-", "Sunset", "Lotus", "Pearl", "The Range", "Bind", "Haven", "Split", "Ascent",
+			"Icebox", "Breeze", "Fracture", "Distric", "Piazza", "Kasbah" };
+	
 	/**
 	 * @param loginView
 	 * @param loggedProf
 	 */
-	public AdminView() {
+	
+	//LoginView login dentro del constructor
+	public AdminView(Usuario admin, Controlador datos) {
 
 		panelBattle = new JPanel();
-		paneDelete = new JPanel();
-		paneDelete.setBackground(new Color(63, 204, 220));
+		paneCrearPartida = new JPanel();
+		paneCrearPartida.setBackground(new Color(63, 204, 220));
 		panelModify = new JPanel();
 		panelModify.setBackground(new Color(63, 204, 220));
 		panelAscend = new JPanel();
 		panelAscend.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
-		trainersComboBox = new JComboBox<String>();
-		trainersComboBox.setMaximumRowCount(20);
-		trainersComboBox.setForeground(new Color(0, 0, 0));
-		trainersComboBox.setBackground(SystemColor.control);
-		trainersComboBox.setBounds(208, 153, 237, 53);
-		panelBattle.add(trainersComboBox);
-		trainersComboBox.addActionListener(this);
+		cbJugadorBan = new JComboBox<String>();
+		cbJugadorBan.setMaximumRowCount(20);
+		cbJugadorBan.setForeground(new Color(0, 0, 0));
+		cbJugadorBan.setBackground(SystemColor.control);
+		cbJugadorBan.setBounds(208, 153, 237, 53);
+		panelBattle.add(cbJugadorBan);
+		cbJugadorBan.addActionListener(this);
 
-		comoBoxAscenderJugador = new JComboBox<String>();
-		comoBoxAscenderJugador.setBounds(404, 91, 222, 31);
-		comoBoxAscenderJugador.addActionListener(this);
-		panelAscend.add(comoBoxAscenderJugador);
+		cbJugadorAscender = new JComboBox<String>();
+		cbJugadorAscender.setBounds(404, 91, 222, 31);
+		cbJugadorAscender.addActionListener(this);
+		panelAscend.add(cbJugadorAscender);
 
-		// 1.Battles View
 		panelBattle.setBackground(new Color(192, 192, 192));
 		pestanas.addTab("BANEOS", panelBattle);
 
 		panelBattle.setLayout(null);
 
-		teamButton = new JButton("BANEAR");
-		teamButton.setBounds(10, 389, 142, 49);
-		panelBattle.add(teamButton);
-		teamButton.addActionListener(this);
+		btnBanear = new JButton("BANEAR");
+		btnBanear.setBounds(10, 389, 142, 49);
+		panelBattle.add(btnBanear);
+		btnBanear.addActionListener(this);
 
-		informationButton = new JButton("REVISAR");
-		informationButton.setBounds(10, 291, 142, 55);
-		panelBattle.add(informationButton);
-		informationButton.addActionListener(this);
+		btnRevisar = new JButton("REVISAR");
+		btnRevisar.setBounds(10, 291, 142, 55);
+		panelBattle.add(btnRevisar);
+		btnRevisar.addActionListener(this);
 
-		JLabel selectTrainerLabel = new JLabel("Select Trainner:");
-		selectTrainerLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
-		selectTrainerLabel.setBounds(10, 150, 142, 53);
-		panelBattle.add(selectTrainerLabel);
+		JLabel labelJugador = new JLabel("Selecciona Jugador:");
+		labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
+		labelJugador.setBounds(10, 150, 175, 53);
+		panelBattle.add(labelJugador);
 
 		/*
-		 * This one is the TextArean where the trainers info is going to be shown it is
+		 * This one is the TextArean where the players info is going to be shown it is
 		 * an area and not a normal text field because it has to show more than one line
 		 * and a label can not handle it
 		 */
-		resulttextField = new JTextArea(2, 30);
-		resulttextField.setBackground(new Color(200, 243, 249));
-		resulttextField.setEditable(false);
-		resulttextField.setBounds(188, 286, 280, 175);
-		panelBattle.add(resulttextField);
+		tfInformacion = new JTextArea(2, 30);
+		tfInformacion.setBackground(new Color(200, 243, 249));
+		tfInformacion.setEditable(false);
+		tfInformacion.setBounds(188, 286, 280, 175);
+		panelBattle.add(tfInformacion);
+		btnBanear.setEnabled(false);
 
-		informationButton.setEnabled(false);
-		teamButton.setEnabled(false);
-
-		// The JLabel under this comment has no text because the picture of Oak is on
+		// The JLabel under this comment has no text because a picture is on
 		// this Label
-		JLabel professorImageLabel = new JLabel("");
-		professorImageLabel.setBounds(667, 178, 188, 341);
-		panelBattle.add(professorImageLabel);
+		JLabel lblImagen = new JLabel("");
+		lblImagen.setBounds(667, 178, 188, 341);
+		panelBattle.add(lblImagen);
 
-		JLabel welcomeProfessorLabel = new JLabel("Bienvenido señor Administrador!!");
-		welcomeProfessorLabel.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
-		welcomeProfessorLabel.setBounds(24, 30, 294, 28);
-		panelBattle.add(welcomeProfessorLabel);
+		JLabel lblBienvenido = new JLabel("Bienvenido/a, " + admin.getNombre() + " :)");
+		lblBienvenido.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
+		lblBienvenido.setBounds(24, 30, 294, 28);
+		panelBattle.add(lblBienvenido);
 
-		tableModel = new DefaultTableModel();
-		String[] tableHeaders = { "PokedexID", "Name", "Nickname", "Region", "type1", "type2", "level" };
-		tableModel.setColumnIdentifiers(tableHeaders);
+		lblFondoBaneo = new JLabel("");
+		lblFondoBaneo.setBounds(0, 0, 1061, 543);
+		panelBattle.add(lblFondoBaneo);
 
-		tableModel2 = new DefaultTableModel();
-		String[] tableHeaders2 = { "TrainerID1", "TrainerID2", "WinnerID" };
-		tableModel2.setColumnIdentifiers(tableHeaders2);
+		// 2.Crear partida
 
-		lblFondoLabo = new JLabel("");
-		lblFondoLabo.setBounds(0, 0, 1061, 543);
-		panelBattle.add(lblFondoLabo);
+		pestanas.addTab("CREAR", paneCrearPartida);
+		paneCrearPartida.setLayout(null);
 
-		// 2.Delete View
+		JLabel lblCrearPartida = new JLabel("Crea una partida");
+		lblCrearPartida.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
+		lblCrearPartida.setBounds(27, 26, 337, 17);
+		paneCrearPartida.add(lblCrearPartida);
 
-		pestanas.addTab("CREAR", paneDelete);
-		paneDelete.setLayout(null);
+		lblNombreParti = new JLabel("Introduce el nombre de la Partida");
+		lblNombreParti.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNombreParti.setBounds(49, 63, 228, 25);
+		paneCrearPartida.add(lblNombreParti);
 
-		JLabel deleteMessage = new JLabel("Which trainer do you want to delete?");
-		deleteMessage.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
-		deleteMessage.setBounds(27, 26, 337, 17);
-		paneDelete.add(deleteMessage);
+		lblSeleccionaMapa = new JLabel("Selecciona un Mapa");
+		lblSeleccionaMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblSeleccionaMapa.setBounds(471, 63, 141, 25);
+		paneCrearPartida.add(lblSeleccionaMapa);
 
-		lblIntroducirNombreParti = new JLabel("Introduce el nombre de la Partida");
-		lblIntroducirNombreParti.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblIntroducirNombreParti.setBounds(49, 63, 228, 25);
-		paneDelete.add(lblIntroducirNombreParti);
+		lblFechaPartida = new JLabel("Selecciona una fecha para la Partida");
+		lblFechaPartida.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblFechaPartida.setBounds(742, 63, 254, 25);
+		paneCrearPartida.add(lblFechaPartida);
 
-		lblSelecMapa = new JLabel("Selecciona un Mapa");
-		lblSelecMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblSelecMapa.setBounds(471, 63, 141, 25);
-		paneDelete.add(lblSelecMapa);
+		JDateChooser calenderFechaPartida = new JDateChooser();
+		calenderFechaPartida.setEnabled(false);
+		calenderFechaPartida.setDateFormatString("dd-MM-yyyy");
+		calenderFechaPartida.setBounds(742, 97, 233, 20);
+		paneCrearPartida.add(calenderFechaPartida);
 
-		lblSelecFechaPartida = new JLabel("Selecciona una fecha para la Partida");
-		lblSelecFechaPartida.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblSelecFechaPartida.setBounds(742, 63, 254, 25);
-		paneDelete.add(lblSelecFechaPartida);
+		tfNombrePartida = new JTextField();
+		tfNombrePartida.setBounds(49, 98, 228, 19);
+		paneCrearPartida.add(tfNombrePartida);
+		tfNombrePartida.setColumns(10);
 
-		JDateChooser calenderSelecFechaPartida = new JDateChooser();
-		calenderSelecFechaPartida.setEnabled(false);
-		calenderSelecFechaPartida.setDateFormatString("yyyy-MM-dd");
-		calenderSelecFechaPartida.setBounds(742, 97, 233, 20);
-		paneDelete.add(calenderSelecFechaPartida);
+		cbMapaCrear = new JComboBox<String>(mapas);
+		cbMapaCrear.setBounds(471, 98, 141, 21);
+		paneCrearPartida.add(cbMapaCrear);
 
-		textFieldNombrePartida = new JTextField();
-		textFieldNombrePartida.setBounds(49, 98, 228, 19);
-		paneDelete.add(textFieldNombrePartida);
-		textFieldNombrePartida.setColumns(10);
+		JButton btnGuardar = new JButton("GUARDAR");
+		btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnGuardar.setBounds(471, 435, 141, 43);
+		paneCrearPartida.add(btnGuardar);
 
-		JComboBox comboBoxSelecMapa = new JComboBox();
-		comboBoxSelecMapa.setBounds(471, 98, 141, 21);
-		paneDelete.add(comboBoxSelecMapa);
+		JLabel lblEquipo1 = new JLabel("EQUIPO 1");
+		lblEquipo1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEquipo1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblEquipo1.setBounds(49, 184, 228, 25);
+		paneCrearPartida.add(lblEquipo1);
 
-		JButton btnGuardarCrearPartida = new JButton("GUARDAR");
-		btnGuardarCrearPartida.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnGuardarCrearPartida.setBounds(471, 435, 141, 43);
-		paneDelete.add(btnGuardarCrearPartida);
+		JLabel lblEquipo2 = new JLabel("EQUIPO 2");
+		lblEquipo2.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEquipo2.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblEquipo2.setBounds(768, 191, 228, 25);
+		paneCrearPartida.add(lblEquipo2);
 
-		JLabel lblEquipo = new JLabel("EQUIPO 1");
-		lblEquipo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEquipo.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEquipo.setBounds(49, 184, 228, 25);
-		paneDelete.add(lblEquipo);
+		cbJugadorEq1 = new JComboBox<String>();
+		cbJugadorEq1.setBounds(97, 219, 141, 21);
+		paneCrearPartida.add(cbJugadorEq1);
 
-		JLabel lblEquipo_2 = new JLabel("EQUIPO 2");
-		lblEquipo_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblEquipo_2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEquipo_2.setBounds(768, 191, 228, 25);
-		paneDelete.add(lblEquipo_2);
-
-		JComboBox comboBoxEquipo1Jugador1 = new JComboBox();
-		comboBoxEquipo1Jugador1.setBounds(97, 219, 141, 21);
-		paneDelete.add(comboBoxEquipo1Jugador1);
-
-		JComboBox comboBoxEquipo1Jugador2 = new JComboBox();
-		comboBoxEquipo1Jugador2.setBounds(97, 263, 141, 21);
-		paneDelete.add(comboBoxEquipo1Jugador2);
-
-		JComboBox comboBoxEquipo1Jugador3 = new JComboBox();
-		comboBoxEquipo1Jugador3.setBounds(97, 304, 141, 21);
-		paneDelete.add(comboBoxEquipo1Jugador3);
-
-		JComboBox comboBoxEquipo1Jugador4 = new JComboBox();
-		comboBoxEquipo1Jugador4.setBounds(97, 349, 141, 21);
-		paneDelete.add(comboBoxEquipo1Jugador4);
-
-		JComboBox comboBoxEquipo1Jugador5 = new JComboBox();
-		comboBoxEquipo1Jugador5.setBounds(97, 392, 141, 21);
-		paneDelete.add(comboBoxEquipo1Jugador5);
-
-		JComboBox comboBoxEquipo2Jugador1 = new JComboBox();
-		comboBoxEquipo2Jugador1.setBounds(804, 219, 141, 21);
-		paneDelete.add(comboBoxEquipo2Jugador1);
-
-		JComboBox comboBoxEquipo2Jugador2 = new JComboBox();
-		comboBoxEquipo2Jugador2.setBounds(804, 263, 141, 21);
-		paneDelete.add(comboBoxEquipo2Jugador2);
-
-		JComboBox comboBoxEquipo2Jugador3 = new JComboBox();
-		comboBoxEquipo2Jugador3.setBounds(804, 304, 141, 21);
-		paneDelete.add(comboBoxEquipo2Jugador3);
-
-		JComboBox comboBoxEquipo2Jugador4 = new JComboBox();
-		comboBoxEquipo2Jugador4.setBounds(804, 349, 141, 21);
-		paneDelete.add(comboBoxEquipo2Jugador4);
-
-		JComboBox comboBoxEquipo2Jugador5 = new JComboBox();
-		comboBoxEquipo2Jugador5.setBounds(804, 392, 141, 21);
-		paneDelete.add(comboBoxEquipo2Jugador5);
+		cbJugadorEq2 = new JComboBox<String>();
+		cbJugadorEq2.setBounds(804, 219, 141, 21);
+		paneCrearPartida.add(cbJugadorEq2);
 
 		lblFondoCrear = new JLabel("");
 		lblFondoCrear.setBounds(0, 0, 1061, 543);
-		paneDelete.add(lblFondoCrear);
+		paneCrearPartida.add(lblFondoCrear);
 		pestanas.addTab("MODIFICAR", panelModify);
 		panelModify.setLayout(null);
 
@@ -278,13 +229,13 @@ public class AdminView extends JDialog implements ActionListener {
 		lblFecha.setBounds(40, 260, 62, 14);
 		panelModify.add(lblFecha);
 
-		JComboBox comboBoxPartidaModi = new JComboBox();
-		comboBoxPartidaModi.setBounds(223, 133, 108, 21);
-		panelModify.add(comboBoxPartidaModi);
+		cbPartidaMod = new JComboBox<Integer>();
+		cbPartidaMod.setBounds(223, 133, 108, 21);
+		panelModify.add(cbPartidaMod);
 
-		JComboBox comboBoxMapa = new JComboBox();
-		comboBoxMapa.setBounds(223, 199, 108, 21);
-		panelModify.add(comboBoxMapa);
+		cbMapaMod = new JComboBox<String>(mapas);
+		cbMapaMod.setBounds(223, 199, 108, 21);
+		panelModify.add(cbMapaMod);
 
 		btnGuardarModi = new JButton("GUARDAR");
 		btnGuardarModi.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -300,7 +251,7 @@ public class AdminView extends JDialog implements ActionListener {
 		lblNewLabel_2.setBounds(0, 0, 1061, 543);
 		panelModify.add(lblNewLabel_2);
 
-		// Pestaña4
+		// PestaÃ±a4
 		pestanas.addTab("ASCENDER", panelAscend);
 		panelAscend.setLayout(null);
 
@@ -331,15 +282,66 @@ public class AdminView extends JDialog implements ActionListener {
 
 		getContentPane().add(pestanas);
 		// Using @param name = null because I want all
-		// trainers to be added and none to be removed
+		// players to be added and none to be removed
 
 		// Configuramos la ventana
 
 		setSize(1080, 607);
+
+		cargarJugadores(datos);
+		cargarPartidas(datos);
+
+	}
+
+	private void cargarPartidas(Controlador datos) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void cargarJugadores(Controlador datos) {
+		// Hemos delcarado el arraylist de jugadores anteriormente y lo usamos al
+		// entrar en el mÃ©todo listarJugadores, que nos devuelve todos
+		// los objetos Usuario con esAdmin = 0
+		try {
+			jugadores = datos.verJugadores();
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error al buscar los jugadores",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		// Si no hay jugadores lo comuicamos en las combo box
+		if (jugadores == null || jugadores.size() == 0) {
+			cbJugadorBan.addItem("No hay jugadores disponibles");
+			cbJugadorEq1.addItem("No hay jugadores disponibles");
+			cbJugadorEq2.addItem("No hay jugadores disponibles");
+			cbJugadorAscender.addItem("No hay jugadores disponibles");
+
+		} else {
+
+			// Si hay jugadores hacemos un for-each donde devuelve el nombre de cada uno de
+			// ellos
+			for (Usuario usu : jugadores) {
+				cbJugadorBan.addItem(usu.getUsername());
+				cbJugadorEq1.addItem(usu.getUsername());
+				cbJugadorEq2.addItem(usu.getUsername());
+				cbJugadorAscender.addItem(usu.getUsername());
+			}
+			cbJugadorBan.setSelectedIndex(-1);
+			cbJugadorEq1.setSelectedIndex(-1);
+			cbJugadorEq2.setSelectedIndex(-1);
+			cbJugadorAscender.setSelectedIndex(-1);
+		}
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+		if (e.getSource().equals(btnRevisar)) {
+			if (cbJugadorBan.getSelectedIndex() == -1) {
+				JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR",
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				tfInformacion.setText("Aqui va la info");
+			}
+		}
 	}
 }
