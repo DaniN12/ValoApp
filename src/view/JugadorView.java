@@ -21,6 +21,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import controller.Controlador;
+import model.Usuario;
+
 import javax.swing.JRadioButton;
 
 public class JugadorView extends JDialog implements ActionListener {
@@ -28,22 +31,16 @@ public class JugadorView extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldApellidoMod;
-	private JTextField textFieldUsuarioMod;
-	private JTextField textFieldContraActualMod;
-	private JTextField textFieldConfirmarContra;
-	private JButton btnGuardarMod;
-	private DefaultTableModel tableModel;
-	private DefaultTableModel tableModel2;
+	private Usuario jugador;
 	private JPanel panelInfo;
 	private JPanel panelColección;
 	private JPanel panelModificar;
 	private JPanel panelPartidas;
-	private JLabel lblFondo;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JLabel lblFondoLabo;
 	private JTextField textFieldNombreMod;
+	private JTextField textFieldApellidoMod;
+	private JTextField textFieldUsuarioMod;
+	private JTextField textFieldContraActualMod;
+	private JTextField textFieldConfirmarContra;
 	private JTextField textFieldContraNueva;
 	private JTextField textFieldUsuario;
 	private JTextField textFieldNombre;
@@ -52,12 +49,16 @@ public class JugadorView extends JDialog implements ActionListener {
 	private JTextField textFieldAgente;
 	private JTextField textFieldArma;
 	private JTextField textFieldSkinFav;
+	private JTextField textFieldOtro;
+	private JLabel lblFondo;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JLabel lblFondoLabo;
 	private JLabel lblAgenteColec;
 	private JLabel lblArmaColec;
 	private JLabel lblSkinFavColec;
 	private JLabel armaImagen;
 	private JLabel skinFavImagen;
-	private JTextField textFieldOtro;
 	private JTable table;
 	private JLabel imagenJugadorLabel;
 	private JLabel bienvenidoJugadorLabel;
@@ -78,16 +79,24 @@ public class JugadorView extends JDialog implements ActionListener {
 	private JLabel lblConfirmarContra;
 	private JLabel lblSexoMod;	
 	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_4;
 	private JComboBox<String> comboBoxArma;
 	private JComboBox<String> comboBoxSkinFav;
 	private JComboBox<String> comboBoxAgente;
 	private JButton btnGuardarColec;
+	private JButton btnGuardarMod;
 	private JRadioButton rdbtnMasculino;
 	private JRadioButton rdbtnFemenino;
 	private JRadioButton rdbtnOtro;
+	private String[] armas = {"-", "CLASSIC", "SHORTY", "FRENZY", "GHOST", "SHERIFF", "STINGER", "SPECTRE",
+			"BUCKY", "JUDGE", "BULLDOG", "GUARDIAN", "PHANTOM", "VANDAL", "MARSHAL", "OPERATOR", "ARES", "ODIN"};
+	private String[] agentes = { "-", "JETT", "RAZE", "BREACH", "OMEN", "BRIMSTONE", "PHOENIX", "SAGE", "SOVA",
+			"VIPER", "CYPHER", "REYNA", "KILLJOY", "SKYE", "YORU", "ASTRA", "KAY/O", "CHAMBER", "NEON", "FADE"
+			, "HARBOR", "GEKKO", "DEADLOCK", "ISO", "CLOVE"};
+	private String[] skins = { "-", "Elderflames", "Protocol 781-A", "Zedd X Valorant SPECTRUM", "Radiant Entertainment System", "MYSTBLOOM", "VCT x", "Primordium", "Ignite",
+			"BlastX", "Glitchpop", "ChronoVoid", "Sentinels of light", "Imperium", "Neo Frontier", "Prelude to Chaos", "RGX", "Ruination", "Singularity ", "Araxy"
+			, "Overdrive", "XERØFANG", "Cryostasis", "Forsaken", "Gaia", "Ion", "Magepunk", "Oni", "Prime", "Reaver", "Sovereign", "Valiant Hero", "Kuronami", "Gaia", "Gaia"};
 	
-	public JugadorView() {
+	public JugadorView(Usuario jugador, Controlador datos) {
 
 		panelInfo = new JPanel();
 		panelColección = new JPanel();
@@ -115,14 +124,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		bienvenidoJugadorLabel.setBounds(24, 30, 248, 28);
 		panelInfo.add(bienvenidoJugadorLabel);
 
-		tableModel = new DefaultTableModel();
-		String[] tableHeaders = { "PokedexID", "Name", "Nickname", "Region", "type1", "type2", "level" };
-		tableModel.setColumnIdentifiers(tableHeaders);
-
-		tableModel2 = new DefaultTableModel();
-		String[] tableHeaders2 = { "TrainerID1", "TrainerID2", "WinnerID" };
-		tableModel2.setColumnIdentifiers(tableHeaders2);
-
+		
 		lblUsuario = new JLabel("Usuario:");
 		lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblUsuario.setBounds(59, 105, 96, 21);
@@ -158,25 +160,25 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblSkinFav.setBounds(59, 299, 106, 21);
 		panelInfo.add(lblSkinFav);
 
-		textFieldUsuario = new JTextField();
+		textFieldUsuario = new JTextField(jugador.getUsername());
 		textFieldUsuario.setEditable(false);
 		textFieldUsuario.setBounds(181, 105, 106, 22);
 		panelInfo.add(textFieldUsuario);
 		textFieldUsuario.setColumns(10);
 
-		textFieldNombre = new JTextField();
+		textFieldNombre = new JTextField(jugador.getNombre());
 		textFieldNombre.setEditable(false);
 		textFieldNombre.setColumns(10);
 		textFieldNombre.setBounds(181, 139, 106, 22);
 		panelInfo.add(textFieldNombre);
 
-		textFieldApellido = new JTextField();
+		textFieldApellido = new JTextField(jugador.getApellido());
 		textFieldApellido.setEditable(false);
 		textFieldApellido.setColumns(10);
 		textFieldApellido.setBounds(181, 171, 106, 22);
 		panelInfo.add(textFieldApellido);
 
-		textFieldSexo = new JTextField();
+		textFieldSexo = new JTextField(jugador.getSexo());
 		textFieldSexo.setEditable(false);
 		textFieldSexo.setColumns(10);
 		textFieldSexo.setBounds(181, 203, 106, 22);
@@ -244,23 +246,28 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblSkinFavColec.setBounds(831, 91, 133, 24);
 		panelColección.add(lblSkinFavColec);
 
-		comboBoxAgente = new JComboBox<String>();
+		comboBoxAgente = new JComboBox<String>(agentes);
 		comboBoxAgente.setBounds(81, 125, 168, 34);
 		panelColección.add(comboBoxAgente);
 
-		comboBoxArma = new JComboBox<String>();
+		comboBoxArma = new JComboBox<String>(armas);
 		comboBoxArma.setBounds(456, 125, 168, 34);
 		panelColección.add(comboBoxArma);
 
-		comboBoxSkinFav = new JComboBox<String>();
+		comboBoxSkinFav = new JComboBox<String>(skins);
 		comboBoxSkinFav.setBounds(824, 125, 168, 34);
 		panelColección.add(comboBoxSkinFav);
 
 		btnGuardarColec = new JButton("GUARDAR");
+		btnGuardarColec.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnGuardarColec.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnGuardarColec.setBounds(476, 434, 148, 52);
 		panelColección.add(btnGuardarColec);
 
+		//modificar view
 		lblFondo = new JLabel("");
 		lblFondo.setBounds(0, 0, 1061, 543);
 		panelColección.add(lblFondo);
@@ -309,25 +316,25 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblSexoMod.setBounds(151, 326, 53, 14);
 		panelModificar.add(lblSexoMod);
 
-		textFieldNombreMod = new JTextField();
+		textFieldNombreMod = new JTextField(jugador.getNombre());
 		textFieldNombreMod.setHorizontalAlignment(SwingConstants.CENTER);
 		textFieldNombreMod.setColumns(10);
 		textFieldNombreMod.setBounds(341, 136, 101, 20);
 		panelModificar.add(textFieldNombreMod);
 
-		textFieldApellidoMod = new JTextField();
+		textFieldApellidoMod = new JTextField(jugador.getApellido());
 		textFieldApellidoMod.setHorizontalAlignment(SwingConstants.CENTER);
 		textFieldApellidoMod.setBounds(341, 167, 101, 20);
 		panelModificar.add(textFieldApellidoMod);
 		textFieldApellidoMod.setColumns(10);
 
-		textFieldUsuarioMod = new JTextField();
+		textFieldUsuarioMod = new JTextField(jugador.getUsername());
 		textFieldUsuarioMod.setHorizontalAlignment(SwingConstants.CENTER);
 		textFieldUsuarioMod.setColumns(10);
 		textFieldUsuarioMod.setBounds(341, 197, 101, 20);
 		panelModificar.add(textFieldUsuarioMod);
 
-		textFieldContraActualMod = new JTextField();
+		textFieldContraActualMod = new JTextField(jugador.getContrasena());
 		textFieldContraActualMod.setHorizontalAlignment(SwingConstants.CENTER);
 		textFieldContraActualMod.setColumns(10);
 		textFieldContraActualMod.setBounds(341, 227, 101, 20);
@@ -414,17 +421,16 @@ public class JugadorView extends JDialog implements ActionListener {
 	}
 	
 	/*private void setPersonalInfo() {
-		textFieldUsuario.setText(String.valueOf(usuario.getTrainerID()));
-		textFieldNombreMod.setText(usuario.getName());
-		textFieldApellidoMod.setText(usuario.getOriginCity());
-		ageCalender.setDate(trainer.getBirthdate());
-		textGender.setText(trainer.getGender());
-		textBadges.setText(String.valueOf(trainer.getBadges()));
+		textFieldUsuario.setText(String.valueOf(jugador.getUsername()));
+		textFieldNombreMod.setText(jugador.getNombre());
+		textFieldApellidoMod.setText(jugador.getApellido());
+		textFieldContraActualMod.setContrasena(jugador.getContrasena());
+		textGender.setText(jugador.getGender());
+		
 	}
 
-	private void updateTrainer() {
-		java.sql.Date date = new java.sql.Date(ageCalender.getDate().toInstant().toEpochMilli());
-
+	/*private void updateTrainer() {
+		
 		trainer.setName(textName.getText());
 		trainer.setBirthdate(date);
 		trainer.setGender(textGender.getText());
@@ -432,4 +438,5 @@ public class JugadorView extends JDialog implements ActionListener {
 		trainer.setBadges(Integer.parseInt(textBadges.getText()));
 
 	}*/
+	
 }
