@@ -6,6 +6,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -19,6 +20,7 @@ import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 import controller.Controlador;
 import excepciones.CreateException;
+import model.Partida;
 import model.Usuario;
 
 public class AdminView extends JDialog implements ActionListener {
@@ -26,13 +28,13 @@ public class AdminView extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextArea tfInformacion;
 	private JButton btnBanear;
-	private JButton btnRevisar;
-	private JButton btnGuardarModi;
-	private JButton upgradeButton;
+	private JButton btnRevisarBan;
+	private JButton btnModificar;
+	private JButton btnAscender;
 	private JDateChooser addCalender;
 	private JComboBox<String> cbJugadorBan;
 	private JComboBox<String> cbJugadorAscender;
-	private JPanel panelBattle;
+	private JPanel panelBaneo;
 	private JPanel paneCrearPartida;
 	private JPanel panelModify;
 	private JPanel panelAscend;
@@ -42,10 +44,10 @@ public class AdminView extends JDialog implements ActionListener {
 	private JLabel lblFondoBaneo;
 	private JLabel lblMapa;
 	private JLabel lblFecha;
-	private JLabel lblNombreParti;
+	private JLabel lblPartida_ID;
 	private JLabel lblSeleccionaMapa;
 	private JLabel lblFechaPartida;
-	private JTextField tfNombrePartida;
+	private JTextField tfPartida_ID;
 	private JComboBox<String> cbJugadorEq1;
 	private JComboBox<String> cbJugadorEq2;
 	private JComboBox<String> cbMapaCrear;
@@ -54,16 +56,23 @@ public class AdminView extends JDialog implements ActionListener {
 	private ArrayList<Usuario> jugadores;
 	private String[] mapas = { "-", "Sunset", "Lotus", "Pearl", "The Range", "Bind", "Haven", "Split", "Ascent",
 			"Icebox", "Breeze", "Fracture", "Distric", "Piazza", "Kasbah" };
-	
+	private Controlador datos;
+	private JButton btnCrear;
+	private JDateChooser calendarFechaPartida;
+	private JButton btnRevisarAsc;
+	private JTextArea tfInfoAscender;
+
 	/**
 	 * @param loginView
 	 * @param loggedProf
 	 */
-	
-	//LoginView login dentro del constructor
+
+	// LoginView login dentro del constructor
 	public AdminView(Usuario admin, Controlador datos) {
 
-		panelBattle = new JPanel();
+		this.datos = datos;
+
+		panelBaneo = new JPanel();
 		paneCrearPartida = new JPanel();
 		paneCrearPartida.setBackground(new Color(63, 204, 220));
 		panelModify = new JPanel();
@@ -77,33 +86,32 @@ public class AdminView extends JDialog implements ActionListener {
 		cbJugadorBan.setForeground(new Color(0, 0, 0));
 		cbJugadorBan.setBackground(SystemColor.control);
 		cbJugadorBan.setBounds(208, 153, 237, 53);
-		panelBattle.add(cbJugadorBan);
-		cbJugadorBan.addActionListener(this);
+		panelBaneo.add(cbJugadorBan);
 
 		cbJugadorAscender = new JComboBox<String>();
 		cbJugadorAscender.setBounds(404, 91, 222, 31);
 		cbJugadorAscender.addActionListener(this);
 		panelAscend.add(cbJugadorAscender);
 
-		panelBattle.setBackground(new Color(192, 192, 192));
-		pestanas.addTab("BANEOS", panelBattle);
+		panelBaneo.setBackground(new Color(192, 192, 192));
+		pestanas.addTab("BANEOS", panelBaneo);
 
-		panelBattle.setLayout(null);
+		panelBaneo.setLayout(null);
 
 		btnBanear = new JButton("BANEAR");
 		btnBanear.setBounds(10, 389, 142, 49);
-		panelBattle.add(btnBanear);
+		panelBaneo.add(btnBanear);
 		btnBanear.addActionListener(this);
 
-		btnRevisar = new JButton("REVISAR");
-		btnRevisar.setBounds(10, 291, 142, 55);
-		panelBattle.add(btnRevisar);
-		btnRevisar.addActionListener(this);
+		btnRevisarBan = new JButton("REVISAR");
+		btnRevisarBan.setBounds(10, 291, 142, 55);
+		panelBaneo.add(btnRevisarBan);
+		btnRevisarBan.addActionListener(this);
 
 		JLabel labelJugador = new JLabel("Selecciona Jugador:");
 		labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
 		labelJugador.setBounds(10, 150, 175, 53);
-		panelBattle.add(labelJugador);
+		panelBaneo.add(labelJugador);
 
 		/*
 		 * This one is the TextArean where the players info is going to be shown it is
@@ -114,23 +122,23 @@ public class AdminView extends JDialog implements ActionListener {
 		tfInformacion.setBackground(new Color(200, 243, 249));
 		tfInformacion.setEditable(false);
 		tfInformacion.setBounds(188, 286, 280, 175);
-		panelBattle.add(tfInformacion);
+		panelBaneo.add(tfInformacion);
 		btnBanear.setEnabled(false);
 
 		// The JLabel under this comment has no text because a picture is on
 		// this Label
 		JLabel lblImagen = new JLabel("");
 		lblImagen.setBounds(667, 178, 188, 341);
-		panelBattle.add(lblImagen);
+		panelBaneo.add(lblImagen);
 
 		JLabel lblBienvenido = new JLabel("Bienvenido/a, " + admin.getNombre() + " :)");
 		lblBienvenido.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
 		lblBienvenido.setBounds(24, 30, 294, 28);
-		panelBattle.add(lblBienvenido);
+		panelBaneo.add(lblBienvenido);
 
 		lblFondoBaneo = new JLabel("");
 		lblFondoBaneo.setBounds(0, 0, 1061, 543);
-		panelBattle.add(lblFondoBaneo);
+		panelBaneo.add(lblFondoBaneo);
 
 		// 2.Crear partida
 
@@ -142,10 +150,10 @@ public class AdminView extends JDialog implements ActionListener {
 		lblCrearPartida.setBounds(27, 26, 337, 17);
 		paneCrearPartida.add(lblCrearPartida);
 
-		lblNombreParti = new JLabel("Introduce el nombre de la Partida");
-		lblNombreParti.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNombreParti.setBounds(49, 63, 228, 25);
-		paneCrearPartida.add(lblNombreParti);
+		lblPartida_ID = new JLabel("Introduce el ID de la Partida");
+		lblPartida_ID.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblPartida_ID.setBounds(49, 63, 228, 25);
+		paneCrearPartida.add(lblPartida_ID);
 
 		lblSeleccionaMapa = new JLabel("Selecciona un Mapa");
 		lblSeleccionaMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -157,25 +165,26 @@ public class AdminView extends JDialog implements ActionListener {
 		lblFechaPartida.setBounds(742, 63, 254, 25);
 		paneCrearPartida.add(lblFechaPartida);
 
-		JDateChooser calenderFechaPartida = new JDateChooser();
-		calenderFechaPartida.setEnabled(false);
-		calenderFechaPartida.setDateFormatString("dd-MM-yyyy");
-		calenderFechaPartida.setBounds(742, 97, 233, 20);
-		paneCrearPartida.add(calenderFechaPartida);
+		calendarFechaPartida = new JDateChooser();
+		calendarFechaPartida.setEnabled(false);
+		calendarFechaPartida.setDateFormatString("dd-MM-yyyy");
+		calendarFechaPartida.setBounds(742, 97, 233, 20);
+		paneCrearPartida.add(calendarFechaPartida);
 
-		tfNombrePartida = new JTextField();
-		tfNombrePartida.setBounds(49, 98, 228, 19);
-		paneCrearPartida.add(tfNombrePartida);
-		tfNombrePartida.setColumns(10);
+		tfPartida_ID = new JTextField();
+		tfPartida_ID.setBounds(49, 98, 228, 19);
+		paneCrearPartida.add(tfPartida_ID);
+		tfPartida_ID.setColumns(10);
 
 		cbMapaCrear = new JComboBox<String>(mapas);
 		cbMapaCrear.setBounds(471, 98, 141, 21);
 		paneCrearPartida.add(cbMapaCrear);
 
-		JButton btnGuardar = new JButton("GUARDAR");
-		btnGuardar.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnGuardar.setBounds(471, 435, 141, 43);
-		paneCrearPartida.add(btnGuardar);
+		btnCrear = new JButton("CREAR");
+		btnCrear.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnCrear.setBounds(471, 435, 141, 43);
+		paneCrearPartida.add(btnCrear);
+		btnCrear.addActionListener(this);
 
 		JLabel lblEquipo1 = new JLabel("EQUIPO 1");
 		lblEquipo1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -237,11 +246,11 @@ public class AdminView extends JDialog implements ActionListener {
 		cbMapaMod.setBounds(223, 199, 108, 21);
 		panelModify.add(cbMapaMod);
 
-		btnGuardarModi = new JButton("GUARDAR");
-		btnGuardarModi.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnGuardarModi.addActionListener(this);
-		btnGuardarModi.setBounds(206, 364, 125, 44);
-		panelModify.add(btnGuardarModi);
+		btnModificar = new JButton("MODIFICAR");
+		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnModificar.setBounds(206, 364, 125, 44);
+		panelModify.add(btnModificar);
+		btnModificar.addActionListener(this);
 
 		JLabel lblNewLabel = new JLabel("vguhgvhjg");
 		lblNewLabel.setBounds(728, 125, 290, 346);
@@ -263,22 +272,27 @@ public class AdminView extends JDialog implements ActionListener {
 		lblSelecJugadorAscender.setBounds(424, 56, 180, 25);
 		panelAscend.add(lblSelecJugadorAscender);
 
-		upgradeButton = new JButton("UPGRADE");
-		upgradeButton.addActionListener(this);
-		upgradeButton.setBounds(446, 368, 122, 69);
-		panelAscend.add(upgradeButton);
-		upgradeButton.setEnabled(false);
-		upgradeButton.setEnabled(false);
+		btnAscender = new JButton("ASCENDER");
+		btnAscender.addActionListener(this);
+		btnAscender.setBounds(446, 368, 122, 69);
+		panelAscend.add(btnAscender);
+		btnAscender.setEnabled(false);
+		btnAscender.addActionListener(this);
 
-		JTextArea resulttextFieldInfoJugadorAscender = new JTextArea(2, 30);
-		resulttextFieldInfoJugadorAscender.setEditable(false);
-		resulttextFieldInfoJugadorAscender.setBackground(new Color(200, 243, 249));
-		resulttextFieldInfoJugadorAscender.setBounds(372, 157, 280, 175);
-		panelAscend.add(resulttextFieldInfoJugadorAscender);
+		tfInfoAscender = new JTextArea(2, 30);
+		tfInfoAscender.setEditable(false);
+		tfInfoAscender.setBackground(new Color(200, 243, 249));
+		tfInfoAscender.setBounds(372, 157, 280, 175);
+		panelAscend.add(tfInfoAscender);
 
 		lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setBounds(0, 0, 1061, 543);
 		panelAscend.add(lblNewLabel_3);
+		
+		btnRevisarAsc = new JButton("REVISAR");
+		btnRevisarAsc.setBounds(191, 221, 142, 55);
+		panelAscend.add(btnRevisarAsc);
+		btnRevisarAsc.addActionListener(this);
 
 		getContentPane().add(pestanas);
 		// Using @param name = null because I want all
@@ -319,6 +333,11 @@ public class AdminView extends JDialog implements ActionListener {
 
 			// Si hay jugadores hacemos un for-each donde devuelve el nombre de cada uno de
 			// ellos
+
+			cbJugadorBan.removeAllItems();
+			cbJugadorEq1.removeAllItems();
+			cbJugadorEq2.removeAllItems();
+			cbJugadorAscender.removeAllItems();
 			for (Usuario usu : jugadores) {
 				cbJugadorBan.addItem(usu.getUsername());
 				cbJugadorEq1.addItem(usu.getUsername());
@@ -335,13 +354,135 @@ public class AdminView extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnRevisar)) {
-			if (cbJugadorBan.getSelectedIndex() == -1) {
-				JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR",
-						JOptionPane.WARNING_MESSAGE);
-			} else {
-				tfInformacion.setText("Aqui va la info");
-			}
+		if (e.getSource().equals(btnRevisarBan)) {
+			revisarJugadorBan();
 		}
+		if (e.getSource().equals(btnBanear)) {
+			banear(datos);
+		}
+		if (e.getSource().equals(btnCrear)) {
+			crearPartida(datos);
+		}
+		if (e.getSource().equals(btnModificar)) {
+			modificarPartida(datos);
+		}
+		if (e.getSource().equals(btnRevisarAsc)) {
+			revisarJugadorAscender();
+		}
+		if (e.getSource().equals(btnAscender)) {
+			ascenderJugador(datos);
+		}
+	}
+
+	private void revisarJugadorAscender() {
+		if (cbJugadorAscender.getSelectedIndex() == -1) {
+			JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
+		} else {
+			btnAscender.setEnabled(true);
+			int pos = cbJugadorAscender.getSelectedIndex();
+			
+			tfInfoAscender.setText("\n");
+			tfInfoAscender.append("    Nombre y Apellido/s:\n    " + jugadores.get(pos).getNombre() + " "
+					+ jugadores.get(pos).getApellido() + "\n\n");
+			tfInfoAscender.append("    DNI: " + jugadores.get(pos).getDni() + "\n\n");
+			tfInfoAscender.append("    Sexo: " + jugadores.get(pos).getSexo() + "\n\n");
+			tfInfoAscender.append("    Fecha de nacimiento: " + jugadores.get(pos).getNacimiento() + "\n\n");
+		}
+	}
+
+	private void revisarJugadorBan() {
+		if (cbJugadorBan.getSelectedIndex() == -1) {
+			JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
+		} else {
+			btnBanear.setEnabled(true);
+			int pos = cbJugadorBan.getSelectedIndex();
+
+			tfInformacion.setText("\n");
+			tfInformacion.append("    Nombre y Apellido/s:\n    " + jugadores.get(pos).getNombre() + " "
+					+ jugadores.get(pos).getApellido() + "\n\n");
+			tfInformacion.append("    DNI: " + jugadores.get(pos).getDni() + "\n\n");
+			tfInformacion.append("    Sexo: " + jugadores.get(pos).getSexo() + "\n\n");
+			tfInformacion.append("    Fecha de nacimiento: " + jugadores.get(pos).getNacimiento() + "\n\n");
+		}
+	}
+
+	private void banear(Controlador datos) {
+		int pos = cbJugadorBan.getSelectedIndex();
+
+		Usuario usu = jugadores.get(pos);
+		try {
+			datos.eliminarJugador(usu.getDni());
+			btnBanear.setEnabled(false);
+			tfInformacion.setText("");
+			JOptionPane.showMessageDialog(this, usu.getUsername() + " ha sido baneado");
+			cargarJugadores(datos);
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, "No se ha podido banear", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
+		}
+
+	}
+
+	private void ascenderJugador(Controlador datos) {
+		int pos = cbJugadorAscender.getSelectedIndex();
+		System.out.println("ascende "+pos);
+		Usuario usu = jugadores.get(pos);
+		try {
+			datos.ascender(usu.getDni());
+			btnAscender.setEnabled(false);
+			tfInfoAscender.setText("");
+			JOptionPane.showMessageDialog(this, usu.getUsername() + " ha sido ascendido");
+			//aqui cuando le das a aceptar como que vuelve al metodo ascender con pos == -1 y da error en jugadores.get(pos)
+			cargarJugadores(datos);
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, "No se ha podido ascender", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+
+	private void crearPartida(Controlador datos) {
+		Date fechaActual = new Date();
+
+		Partida partida = new Partida();
+
+		try {
+			if (tfPartida_ID.getText().isEmpty() || cbMapaCrear.getSelectedIndex() == 0
+					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == 0
+					|| calendarFechaPartida.getDate().before(fechaActual)) {
+				JOptionPane.showMessageDialog(this, "Introduce todos los datos correctamente", "FATAL ERROR",
+						JOptionPane.WARNING_MESSAGE);
+			} else if (cbJugadorEq1.getSelectedIndex() == cbJugadorEq1.getSelectedIndex()) {
+				JOptionPane.showMessageDialog(this, "Ha seleccionado el mismo jugador para ambos equipos",
+						"FATAL ERROR", JOptionPane.WARNING_MESSAGE);
+			} else {
+
+				partida.setPartida_id(Integer.parseInt(tfPartida_ID.getText().trim()));
+				// partida.setFecha(calendarFechaPartida);
+				partida.setMapa(cbMapaCrear.getName());
+				datos.crearPartida(partida);
+				limpiarCrearPartida();
+				JOptionPane.showMessageDialog(this, "Partida creada correctamente");
+			}
+		} catch (NumberFormatException nfe) {
+			JOptionPane.showMessageDialog(this, "Ingrese solo nÃºmeros en el ID de partida", "FATAL ERROR",
+					JOptionPane.WARNING_MESSAGE);
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, "No se ha podido crear la partida", "FATAL ERROR",
+					JOptionPane.WARNING_MESSAGE);
+			e.printStackTrace();
+		}
+
+	}
+
+	private void limpiarCrearPartida() {
+		tfPartida_ID.setText("");
+		cbMapaCrear.setSelectedIndex(0);
+		cbJugadorEq1.setSelectedIndex(-1);
+		cbJugadorEq2.setSelectedIndex(-1);
+	}
+	
+	private void modificarPartida(Controlador datos2) {
+		// TODO Auto-generated method stub
+		
 	}
 }

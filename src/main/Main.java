@@ -1,11 +1,11 @@
 package main;
 
-import view.JugadorView;
+import view.LoginView;
 
 public class Main {
 	public static void main(String[] args) {
 		
-		JugadorView frame = new JugadorView();
+		LoginView frame = new LoginView();
 		frame.setVisible(true);
 	}
 }
