@@ -7,7 +7,6 @@ import model.Coleccion;
 import model.Partida;
 import model.Usuario;
 import excepciones.CreateException;
-import controller.ConnectionOpenClose;
 
 public class Controlador implements IControlador {
 
@@ -29,8 +28,9 @@ public class Controlador implements IControlador {
 	final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
 	final String SELECTpartidasTodo = "SELECT * FROM Partida";
 	final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
+	final String SELECTcoleccion = "SELECT * FROM Coleccion WHERE dni_jugador = ?";
 
-	final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
+	final String DELETEjugador = "DELETE FROM Usuario WHERE dni_jugador = ?";
 
 	@Override
 	public Usuario logIn(String user, String contrasena) throws CreateException {
@@ -466,5 +466,42 @@ public class Controlador implements IControlador {
 		return partidas;
 	}
 
+	@Override
+	public Coleccion getColeccion(String dni) throws CreateException {
+		ResultSet rs = null;
+		Coleccion c = new Coleccion();
+
+		con = conection.openConnection();
+		try {
+			stmt = con.prepareStatement(SELECTcoleccion);
+			stmt.setString(1, dni);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				c.setArmaFav(rs.getString("armaFav"));
+				c.setAgenteFav(rs.getString("agenteFav"));
+				c.setColeccion_id(rs.getInt("coleccion_ID"));
+				c.setDni_Jugadror(dni);
+				c.setSkinFav(rs.getString("skinFav"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar la query");
+			throw new CreateException("Error al obtener la coleccion del usuario");
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					throw new CreateException("Error al cerrar el result set");
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+		return c;
+	}
 
 }
+

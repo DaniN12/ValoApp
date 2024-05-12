@@ -15,6 +15,8 @@ public interface IControlador {
 
     public void crearColeccion(String dni) throws CreateException;
 
+    public Coleccion getColeccion(String dni) throws CreateException;
+
     public void ascender(String dni) throws CreateException;
 
     public void actualizarColeccion(String dni, Coleccion coleccion) throws CreateException;
@@ -33,3 +35,4 @@ public interface IControlador {
 
     public void eliminarJugador(String dni) throws CreateException;
 }
+

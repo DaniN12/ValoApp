@@ -5,7 +5,7 @@ public class Coleccion {
 	private String armaFav;
 	private String skinFav;
 	private String agenteFav;
-	private int dni_jugadror;
+	private String dni_jugador;
 	
 	
 	public int getColeccion_id() {
@@ -32,11 +32,11 @@ public class Coleccion {
 	public void setAgenteFav(String agenteFav) {
 		this.agenteFav = agenteFav;
 	}
-	public int getDni_Jugadror() {
-		return dni_jugadror;
+	public String getDni_Jugadror() {
+		return dni_jugador;
 	}
-	public void setDni_Jugadror(int dni_Jugadror) {
-		this.dni_jugadror = dni_Jugadror;
+	public void setDni_Jugadror(String dni_Jugadror) {
+		this.dni_jugador = dni_Jugadror;
 	}
 	
 	

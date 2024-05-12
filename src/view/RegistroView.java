@@ -147,7 +147,7 @@ public class RegistroView extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == btContinuar) {
-			LoginView login = new LoginView();
+			LoginView login = new LoginView(user, datos);
 			login.setVisible(true);
 			dispose();
 		}

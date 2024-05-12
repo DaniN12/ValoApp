@@ -31,16 +31,16 @@ public class AdminView extends JDialog implements ActionListener {
 	private JButton btnRevisarBan;
 	private JButton btnModificar;
 	private JButton btnAscender;
-	private JDateChooser addCalender;
+	private JDateChooser calendarModificar;
 	private JComboBox<String> cbJugadorBan;
 	private JComboBox<String> cbJugadorAscender;
 	private JPanel panelBaneo;
-	private JPanel paneCrearPartida;
-	private JPanel panelModify;
+	private JPanel panelCrearPartida;
+	private JPanel panelModificar;
 	private JPanel panelAscend;
 	private JLabel lblFondoCrear;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
+	private JLabel lblFondo;
+	private JLabel lblFondoAscender;
 	private JLabel lblFondoBaneo;
 	private JLabel lblMapa;
 	private JLabel lblFecha;
@@ -54,8 +54,9 @@ public class AdminView extends JDialog implements ActionListener {
 	private JComboBox<Integer> cbPartidaMod;
 	private JComboBox<String> cbMapaMod;
 	private ArrayList<Usuario> jugadores;
-	private String[] mapas = { "-", "Sunset", "Lotus", "Pearl", "The Range", "Bind", "Haven", "Split", "Ascent",
-			"Icebox", "Breeze", "Fracture", "Distric", "Piazza", "Kasbah" };
+	private ArrayList<Partida> partidas;
+	private String[] mapas = { "-", "Sunset", "Lotus", "Pearl", "Bind", "Haven", "Split", "Ascent", "Icebox", "Breeze",
+			"Fracture", "Distric", "Piazza", "Kasbah" };
 	private Controlador datos;
 	private JButton btnCrear;
 	private JDateChooser calendarFechaPartida;
@@ -73,10 +74,10 @@ public class AdminView extends JDialog implements ActionListener {
 		this.datos = datos;
 
 		panelBaneo = new JPanel();
-		paneCrearPartida = new JPanel();
-		paneCrearPartida.setBackground(new Color(63, 204, 220));
-		panelModify = new JPanel();
-		panelModify.setBackground(new Color(63, 204, 220));
+		panelCrearPartida = new JPanel();
+		panelCrearPartida.setBackground(new Color(63, 204, 220));
+		panelModificar = new JPanel();
+		panelModificar.setBackground(new Color(63, 204, 220));
 		panelAscend = new JPanel();
 		panelAscend.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
@@ -142,123 +143,119 @@ public class AdminView extends JDialog implements ActionListener {
 
 		// 2.Crear partida
 
-		pestanas.addTab("CREAR", paneCrearPartida);
-		paneCrearPartida.setLayout(null);
+		pestanas.addTab("CREAR", panelCrearPartida);
+		panelCrearPartida.setLayout(null);
 
 		JLabel lblCrearPartida = new JLabel("Crea una partida");
 		lblCrearPartida.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
 		lblCrearPartida.setBounds(27, 26, 337, 17);
-		paneCrearPartida.add(lblCrearPartida);
+		panelCrearPartida.add(lblCrearPartida);
 
 		lblPartida_ID = new JLabel("Introduce el ID de la Partida");
 		lblPartida_ID.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblPartida_ID.setBounds(49, 63, 228, 25);
-		paneCrearPartida.add(lblPartida_ID);
+		panelCrearPartida.add(lblPartida_ID);
 
 		lblSeleccionaMapa = new JLabel("Selecciona un Mapa");
 		lblSeleccionaMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblSeleccionaMapa.setBounds(471, 63, 141, 25);
-		paneCrearPartida.add(lblSeleccionaMapa);
+		panelCrearPartida.add(lblSeleccionaMapa);
 
 		lblFechaPartida = new JLabel("Selecciona una fecha para la Partida");
 		lblFechaPartida.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFechaPartida.setBounds(742, 63, 254, 25);
-		paneCrearPartida.add(lblFechaPartida);
+		panelCrearPartida.add(lblFechaPartida);
 
 		calendarFechaPartida = new JDateChooser();
-		calendarFechaPartida.setEnabled(false);
 		calendarFechaPartida.setDateFormatString("dd-MM-yyyy");
 		calendarFechaPartida.setBounds(742, 97, 233, 20);
-		paneCrearPartida.add(calendarFechaPartida);
+		panelCrearPartida.add(calendarFechaPartida);
 
 		tfPartida_ID = new JTextField();
 		tfPartida_ID.setBounds(49, 98, 228, 19);
-		paneCrearPartida.add(tfPartida_ID);
+		panelCrearPartida.add(tfPartida_ID);
 		tfPartida_ID.setColumns(10);
 
 		cbMapaCrear = new JComboBox<String>(mapas);
 		cbMapaCrear.setBounds(471, 98, 141, 21);
-		paneCrearPartida.add(cbMapaCrear);
+		panelCrearPartida.add(cbMapaCrear);
 
 		btnCrear = new JButton("CREAR");
 		btnCrear.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnCrear.setBounds(471, 435, 141, 43);
-		paneCrearPartida.add(btnCrear);
+		panelCrearPartida.add(btnCrear);
 		btnCrear.addActionListener(this);
 
 		JLabel lblEquipo1 = new JLabel("EQUIPO 1");
 		lblEquipo1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEquipo1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblEquipo1.setBounds(49, 184, 228, 25);
-		paneCrearPartida.add(lblEquipo1);
+		panelCrearPartida.add(lblEquipo1);
 
 		JLabel lblEquipo2 = new JLabel("EQUIPO 2");
 		lblEquipo2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEquipo2.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblEquipo2.setBounds(768, 191, 228, 25);
-		paneCrearPartida.add(lblEquipo2);
+		panelCrearPartida.add(lblEquipo2);
 
 		cbJugadorEq1 = new JComboBox<String>();
 		cbJugadorEq1.setBounds(97, 219, 141, 21);
-		paneCrearPartida.add(cbJugadorEq1);
+		panelCrearPartida.add(cbJugadorEq1);
 
 		cbJugadorEq2 = new JComboBox<String>();
 		cbJugadorEq2.setBounds(804, 219, 141, 21);
-		paneCrearPartida.add(cbJugadorEq2);
+		panelCrearPartida.add(cbJugadorEq2);
 
 		lblFondoCrear = new JLabel("");
 		lblFondoCrear.setBounds(0, 0, 1061, 543);
-		paneCrearPartida.add(lblFondoCrear);
-		pestanas.addTab("MODIFICAR", panelModify);
-		panelModify.setLayout(null);
+		panelCrearPartida.add(lblFondoCrear);
+		pestanas.addTab("MODIFICAR", panelModificar);
+		panelModificar.setLayout(null);
 
-		addCalender = new JDateChooser();
-		addCalender.setDateFormatString("yyyy-MM-dd");
-		addCalender.setBounds(223, 254, 108, 20);
-		panelModify.add(addCalender);
+		calendarModificar = new JDateChooser();
+		calendarModificar.setDateFormatString("yyyy-MM-dd");
+		calendarModificar.setBounds(223, 254, 108, 20);
+		panelModificar.add(calendarModificar);
 
 		JLabel lblPartidaModificar = new JLabel("PARTIDA A MODIFICAR");
 		lblPartidaModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblPartidaModificar.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPartidaModificar.setBounds(40, 135, 173, 14);
-		panelModify.add(lblPartidaModificar);
-
-		// Desactivar los componentes relevantes
-		addCalender.setEnabled(false);
+		panelModificar.add(lblPartidaModificar);
 
 		lblMapa = new JLabel("MAPA");
 		lblMapa.setHorizontalAlignment(SwingConstants.LEFT);
 		lblMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblMapa.setBounds(40, 201, 62, 14);
-		panelModify.add(lblMapa);
+		panelModificar.add(lblMapa);
 
 		lblFecha = new JLabel("FECHA");
 		lblFecha.setHorizontalAlignment(SwingConstants.LEFT);
 		lblFecha.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFecha.setBounds(40, 260, 62, 14);
-		panelModify.add(lblFecha);
+		panelModificar.add(lblFecha);
 
 		cbPartidaMod = new JComboBox<Integer>();
 		cbPartidaMod.setBounds(223, 133, 108, 21);
-		panelModify.add(cbPartidaMod);
+		panelModificar.add(cbPartidaMod);
 
 		cbMapaMod = new JComboBox<String>(mapas);
 		cbMapaMod.setBounds(223, 199, 108, 21);
-		panelModify.add(cbMapaMod);
+		panelModificar.add(cbMapaMod);
 
 		btnModificar = new JButton("MODIFICAR");
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnModificar.setBounds(206, 364, 125, 44);
-		panelModify.add(btnModificar);
+		panelModificar.add(btnModificar);
 		btnModificar.addActionListener(this);
 
-		JLabel lblNewLabel = new JLabel("vguhgvhjg");
-		lblNewLabel.setBounds(728, 125, 290, 346);
-		panelModify.add(lblNewLabel);
+		JLabel lblImagenModificar = new JLabel("vguhgvhjg");
+		lblImagenModificar.setBounds(728, 125, 290, 346);
+		panelModificar.add(lblImagenModificar);
 
-		lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setBounds(0, 0, 1061, 543);
-		panelModify.add(lblNewLabel_2);
+		lblFondo = new JLabel("ahbd");
+		lblFondo.setBounds(0, 0, 1061, 543);
+		panelModificar.add(lblFondo);
 
 		// PestaÃ±a4
 		pestanas.addTab("ASCENDER", panelAscend);
@@ -285,10 +282,10 @@ public class AdminView extends JDialog implements ActionListener {
 		tfInfoAscender.setBounds(372, 157, 280, 175);
 		panelAscend.add(tfInfoAscender);
 
-		lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setBounds(0, 0, 1061, 543);
-		panelAscend.add(lblNewLabel_3);
-		
+		lblFondoAscender = new JLabel("");
+		lblFondoAscender.setBounds(0, 0, 1061, 543);
+		panelAscend.add(lblFondoAscender);
+
 		btnRevisarAsc = new JButton("REVISAR");
 		btnRevisarAsc.setBounds(191, 221, 142, 55);
 		panelAscend.add(btnRevisarAsc);
@@ -308,7 +305,19 @@ public class AdminView extends JDialog implements ActionListener {
 	}
 
 	private void cargarPartidas(Controlador datos) {
-		// TODO Auto-generated method stub
+
+		try {
+			partidas = datos.verPartidas();
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error al buscar las partidas",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		cbPartidaMod.removeAllItems();
+		for (Partida par : partidas) {
+			cbPartidaMod.addItem(par.getPartida_id());
+		}
+		cbPartidaMod.setSelectedIndex(-1);
 
 	}
 
@@ -380,7 +389,7 @@ public class AdminView extends JDialog implements ActionListener {
 		} else {
 			btnAscender.setEnabled(true);
 			int pos = cbJugadorAscender.getSelectedIndex();
-			
+
 			tfInfoAscender.setText("\n");
 			tfInfoAscender.append("    Nombre y Apellido/s:\n    " + jugadores.get(pos).getNombre() + " "
 					+ jugadores.get(pos).getApellido() + "\n\n");
@@ -425,44 +434,62 @@ public class AdminView extends JDialog implements ActionListener {
 
 	private void ascenderJugador(Controlador datos) {
 		int pos = cbJugadorAscender.getSelectedIndex();
-		System.out.println("ascende "+pos);
-		Usuario usu = jugadores.get(pos);
+
 		try {
-			datos.ascender(usu.getDni());
-			btnAscender.setEnabled(false);
-			tfInfoAscender.setText("");
-			JOptionPane.showMessageDialog(this, usu.getUsername() + " ha sido ascendido");
-			//aqui cuando le das a aceptar como que vuelve al metodo ascender con pos == -1 y da error en jugadores.get(pos)
-			cargarJugadores(datos);
-		} catch (CreateException e) {
-			JOptionPane.showMessageDialog(this, "No se ha podido ascender", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
-			e.printStackTrace();
+			Usuario usu = jugadores.get(pos);
+			try {
+				datos.ascender(usu.getDni());
+				btnAscender.setEnabled(false);
+				tfInfoAscender.setText("");
+				JOptionPane.showMessageDialog(this, usu.getUsername() + " ha sido ascendido");
+				// aqui cuando le das a aceptar como que vuelve al metodo ascender con pos == -1
+				// y da error en jugadores.get(pos)
+				cargarJugadores(datos);
+			} catch (CreateException e) {
+				JOptionPane.showMessageDialog(this, "No se ha podido ascender", "FATAL ERROR",
+						JOptionPane.WARNING_MESSAGE);
+				e.printStackTrace();
+			}
+		} catch (IndexOutOfBoundsException e) {
+
 		}
+
 	}
 
 	private void crearPartida(Controlador datos) {
 		Date fechaActual = new Date();
 
-		Partida partida = new Partida();
-
 		try {
 			if (tfPartida_ID.getText().isEmpty() || cbMapaCrear.getSelectedIndex() == 0
-					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == 0
+					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == -1
 					|| calendarFechaPartida.getDate().before(fechaActual)) {
 				JOptionPane.showMessageDialog(this, "Introduce todos los datos correctamente", "FATAL ERROR",
 						JOptionPane.WARNING_MESSAGE);
-			} else if (cbJugadorEq1.getSelectedIndex() == cbJugadorEq1.getSelectedIndex()) {
+			} else if (cbJugadorEq1.getSelectedIndex() == cbJugadorEq2.getSelectedIndex()) {
 				JOptionPane.showMessageDialog(this, "Ha seleccionado el mismo jugador para ambos equipos",
 						"FATAL ERROR", JOptionPane.WARNING_MESSAGE);
 			} else {
-
+				Partida partida = new Partida();
+				String[] jugadoresDni = new String[2];
+				int pos1 = cbJugadorEq1.getSelectedIndex();
+				int pos2 = cbJugadorEq2.getSelectedIndex();
+				Usuario usu = jugadores.get(pos1);
+				jugadoresDni[0] = usu.getDni();
+				usu = jugadores.get(pos2);
+				jugadoresDni[1] = usu.getDni();
 				partida.setPartida_id(Integer.parseInt(tfPartida_ID.getText().trim()));
-				// partida.setFecha(calendarFechaPartida);
-				partida.setMapa(cbMapaCrear.getName());
+				java.sql.Date date = new java.sql.Date(calendarFechaPartida.getDate().toInstant().toEpochMilli());
+				partida.setFecha(date);
+				partida.setMapa((String) cbMapaCrear.getSelectedItem());
+
 				datos.crearPartida(partida);
+				datos.asignarJugadoresAPartida(partida.getPartida_id(), jugadoresDni);
+
+				calendarFechaPartida.cleanup();
 				limpiarCrearPartida();
 				JOptionPane.showMessageDialog(this, "Partida creada correctamente");
 			}
+
 		} catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(this, "Ingrese solo nÃºmeros en el ID de partida", "FATAL ERROR",
 					JOptionPane.WARNING_MESSAGE);
@@ -480,9 +507,29 @@ public class AdminView extends JDialog implements ActionListener {
 		cbJugadorEq1.setSelectedIndex(-1);
 		cbJugadorEq2.setSelectedIndex(-1);
 	}
-	
-	private void modificarPartida(Controlador datos2) {
-		// TODO Auto-generated method stub
-		
+
+	private void modificarPartida(Controlador datos) {
+		Date fechaActual = new Date();
+
+		if (cbMapaMod.getSelectedIndex() == 0 || cbPartidaMod.getSelectedIndex() == -1
+				|| calendarModificar.getDate().before(fechaActual)) {
+			JOptionPane.showMessageDialog(this, "Introduce todos los datos correctamente", "FATAL ERROR",
+					JOptionPane.WARNING_MESSAGE);
+		} else {
+			Partida partida = new Partida();
+			partida.setPartida_id((int) cbPartidaMod.getSelectedItem());
+			java.sql.Date date = new java.sql.Date(calendarModificar.getDate().toInstant().toEpochMilli());
+			partida.setFecha(date);
+			partida.setMapa((String) cbMapaMod.getSelectedItem());
+			JOptionPane.showMessageDialog(this, "Partida modificada correctamente");
+			try {
+				datos.modificarPartida(partida);
+			} catch (CreateException e) {
+				JOptionPane.showMessageDialog(this, "No se ha podido modificar la partida", "FATAL ERROR",
+						JOptionPane.WARNING_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+
 	}
 }
