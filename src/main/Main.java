@@ -1,11 +1,16 @@
 package main;
 
-import view.JugadorView;
+import controller.Controlador;
+import view.LoginView;
 
 public class Main {
-	public static void main(String[] args) {
-		
-		JugadorView frame = new JugadorView();
-		frame.setVisible(true);
-	}
+
+    public static void main(String[] args) {
+
+        Controlador datos = new Controlador();
+
+        LoginView lv = new LoginView(datos);
+        lv.setVisible(true);
+
+    }
 }

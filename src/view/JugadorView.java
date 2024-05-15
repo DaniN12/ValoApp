@@ -2,74 +2,120 @@ package view;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import javax.swing.ImageIcon;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import controller.Controlador;
+import excepciones.CreateException;
+import model.Coleccion;
+import model.Partida;
+import model.Usuario;
 
 import javax.swing.JRadioButton;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class JugadorView extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField textFieldApellidoMod;
-	private JTextField textFieldUsuarioMod;
-	private JTextField textFieldContraActualMod;
-	private JTextField textFieldConfirmarContra;
-	private JButton btnGuardarMod;
-	private DefaultTableModel tableModel;
-	private DefaultTableModel tableModel2;
+	private Usuario jugador;
+	private Coleccion coleccion;
 	private JPanel panelInfo;
 	private JPanel panelColección;
 	private JPanel panelModificar;
 	private JPanel panelPartidas;
-	private JLabel lblFondo;
-	private JLabel lblNewLabel_2;
-	private JLabel lblNewLabel_3;
-	private JLabel lblFondoLabo;
-	private JTextField textFieldNombreMod;
-	private JTextField textFieldContraNueva;
-	private JTextField textFieldUsuario;
-	private JTextField textFieldNombre;
-	private JTextField textFieldApellido;
-	private JTextField textFieldSexo;
-	private JTextField textFieldAgente;
-	private JTextField textFieldArma;
-	private JTextField textFieldSkinFav;
+	private JTextField tfNombreMod;
+	private JTextField tfApellidoMod;
+	private JTextField tfUsuarioMod;
+	private JTextField tfUsuario;
+	private JTextField tfNombre;
+	private JTextField tfApellido;
+	private JTextField tfSexo;
+	private JTextField tfAgente;
+	private JTextField tfArma;
+	private JTextField tfSkin;
+	private JLabel lblFondoColec;
+	private JLabel lblFondoMod;
+	private JLabel lblFondoPart;
+	private JLabel lblFondoInfo;
 	private JLabel lblAgenteColec;
 	private JLabel lblArmaColec;
 	private JLabel lblSkinFavColec;
-	private JComboBox comboBoxArma;
-	private JComboBox comboBoxSkinFav;
-	private JLabel armaImagen;
-	private JLabel skinFavImagen;
-	private JTextField textFieldOtro;
+	private JLabel lblIimagen;
+	private JLabel lblBienvenido;
+	private JLabel lblUsuario;
+	private JLabel lblNombre;
+	private JLabel lblApellido;
+	private JLabel lblSexo;
+	private JLabel lblAgente;
+	private JLabel lblArma;
+	private JLabel lblSkinFav;
+	private JLabel lblBienvenidoColec;
+	private JLabel lblNombreMod;
+	private JLabel lblApellidoMod;
+	private JLabel lblUsuarioMod;
+	private JLabel lblContraNueva;
+	private JLabel lblConfirmarContra;
+	private JLabel lblSexoMod;
+	private JLabel lblNewLabel;
+	private JComboBox<String> cbArma;
+	private JComboBox<String> cbSkinFav;
+	private JComboBox<String> cbAgente;
+	private JButton btnGuardarColec;
+	private JButton btnGuardarMod;
+	private JRadioButton rdbtnMasculino;
+	private JRadioButton rdbtnFemenino;
+	private JRadioButton rdbtnOtro;
+	private Controlador datos;
+	private JScrollPane scrollPane;
 	private JTable table;
+	private DefaultTableModel tableModel2;
+	private final ButtonGroup bgGenero = new ButtonGroup();
+	private String[] armas = { "-", "CLASSIC", "SHORTY", "FRENZY", "GHOST", "SHERIFF", "STINGER", "SPECTRE", "BUCKY",
+			"JUDGE", "BULLDOG", "GUARDIAN", "PHANTOM", "VANDAL", "MARSHAL", "OPERATOR", "ARES", "ODIN" };
+	private String[] agentes = { "-", "JETT", "RAZE", "BREACH", "OMEN", "BRIMSTONE", "PHOENIX", "SAGE", "SOVA", "VIPER",
+			"CYPHER", "REYNA", "KILLJOY", "SKYE", "YORU", "ASTRA", "KAY/O", "CHAMBER", "NEON", "FADE", "HARBOR",
+			"GEKKO", "DEADLOCK", "ISO", "CLOVE" };
+	private String[] skins = { "-", "Elderflames", "Protocol 781-A", "Zedd X Valorant SPECTRUM",
+			"Radiant Entertainment System", "MYSTBLOOM", "VCT x", "Primordium", "Ignite", "BlastX", "Glitchpop",
+			"ChronoVoid", "Sentinels of light", "Imperium", "Neo Frontier", "Prelude to Chaos", "RGX", "Ruination",
+			"Singularity ", "Araxy", "Overdrive", "XERØFANG", "Cryostasis", "Forsaken", "Gaia", "Ion", "Magepunk",
+			"Oni", "Prime", "Reaver", "Sovereign", "Valiant Hero", "Kuronami", "Gaia", "Gaia" };
+	private JPasswordField tfContrasena;
+	private JPasswordField tfConfirmarContrasena;
+	private String dniJugador;
+	private String username;
 
-	/**
-	 * @param loginView
-	 * @param loggedProf
-	 */
-	public JugadorView() {
-		
-
+	public JugadorView(LoginView loginView, boolean b, Usuario jugador, Controlador datos) {
+		super(loginView);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JugadorView.class.getResource("/resources/logoApp.jpg")));
+		setModal(b);
+		this.datos = datos;
+		this.jugador = jugador;
+		try {
+			this.coleccion = datos.getColeccion(this.jugador.getDni());
+		} catch (CreateException e) {
+			System.err.println(e.getMessage());
+		}
 		panelInfo = new JPanel();
 		panelColección = new JPanel();
 		panelColección.setBackground(new Color(63, 204, 220));
@@ -79,7 +125,7 @@ public class JugadorView extends JDialog implements ActionListener {
 		panelPartidas.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
-		// 1.Battles View
+		// 1.Info View
 		panelInfo.setBackground(new Color(192, 192, 192));
 		pestanas.addTab("INFO", panelInfo);
 
@@ -87,330 +133,399 @@ public class JugadorView extends JDialog implements ActionListener {
 
 		// The JLabel under this comment has no text because the picture of Oak is on
 		// this Label
-		JLabel imagenJugadorLabel = new JLabel("rggrgrg");
-		imagenJugadorLabel.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/oak.png")));
-		imagenJugadorLabel.setBounds(667, 178, 188, 341);
-		panelInfo.add(imagenJugadorLabel);
+		lblIimagen = new JLabel("");
+		lblIimagen.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/sage.png")));
+		lblIimagen.setBounds(392, -46, 627, 975);
+		panelInfo.add(lblIimagen);
 
-		JLabel bienvenidoJugadorLabel = new JLabel("Bienvenido Jugador!!");
-		bienvenidoJugadorLabel.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
-		bienvenidoJugadorLabel.setBounds(24, 30, 248, 28);
-		panelInfo.add(bienvenidoJugadorLabel);
+		lblBienvenido = new JLabel("BIENVENIDO JUGADOR!!");
+		lblBienvenido.setForeground(new Color(255, 255, 255));
+		lblBienvenido.setFont(new Font("Segoe UI Black", Font.BOLD, 21));
+		lblBienvenido.setBounds(20, 480, 287, 28);
+		panelInfo.add(lblBienvenido);
 
-		tableModel = new DefaultTableModel();
-		String[] tableHeaders = { "PokedexID", "Name", "Nickname", "Region", "type1", "type2", "level" };
-		tableModel.setColumnIdentifiers(tableHeaders);
-
-		tableModel2 = new DefaultTableModel();
-		String[] tableHeaders2 = { "TrainerID1", "TrainerID2", "WinnerID" };
-		tableModel2.setColumnIdentifiers(tableHeaders2);
-		
-		JLabel lblUsuario = new JLabel("Usuario:");
+		lblUsuario = new JLabel("Usuario:");
+		lblUsuario.setForeground(new Color(255, 255, 255));
 		lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblUsuario.setBounds(59, 105, 96, 21);
 		panelInfo.add(lblUsuario);
-		
-		JLabel lblNombre = new JLabel("Nombre:");
+
+		lblNombre = new JLabel("Nombre:");
+		lblNombre.setForeground(new Color(255, 255, 255));
 		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNombre.setBounds(59, 140, 96, 21);
 		panelInfo.add(lblNombre);
-		
-		JLabel lblApellido = new JLabel("Apellido:");
+
+		lblApellido = new JLabel("Apellido:");
+		lblApellido.setForeground(new Color(255, 255, 255));
 		lblApellido.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblApellido.setBounds(59, 171, 96, 21);
 		panelInfo.add(lblApellido);
-		
-		JLabel lblSexo = new JLabel("Sexo:");
+
+		lblSexo = new JLabel("Sexo:");
+		lblSexo.setForeground(new Color(255, 255, 255));
 		lblSexo.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSexo.setBounds(59, 202, 96, 21);
 		panelInfo.add(lblSexo);
-		
-		JLabel lblAgente = new JLabel("Agente");
+
+		lblAgente = new JLabel("Agente");
+		lblAgente.setForeground(new Color(255, 255, 255));
 		lblAgente.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblAgente.setBounds(59, 236, 96, 21);
 		panelInfo.add(lblAgente);
-		
-		JLabel lblArma = new JLabel("Arma");
+
+		lblArma = new JLabel("Arma");
+		lblArma.setForeground(new Color(255, 255, 255));
 		lblArma.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblArma.setBounds(59, 267, 106, 21);
 		panelInfo.add(lblArma);
-		
-		JLabel lblSkinFav = new JLabel("Skin Favorita:");
+
+		lblSkinFav = new JLabel("Skin Favorita:");
+		lblSkinFav.setForeground(new Color(255, 255, 255));
 		lblSkinFav.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSkinFav.setBounds(59, 299, 106, 21);
 		panelInfo.add(lblSkinFav);
-				
-				textFieldUsuario = new JTextField();
-				textFieldUsuario.setEditable(false);
-				textFieldUsuario.setBounds(181, 105, 106, 22);
-				panelInfo.add(textFieldUsuario);
-				textFieldUsuario.setColumns(10);
-						
-						textFieldNombre = new JTextField();
-						textFieldNombre.setEditable(false);
-						textFieldNombre.setColumns(10);
-						textFieldNombre.setBounds(181, 139, 106, 22);
-						panelInfo.add(textFieldNombre);
-						
-						textFieldApellido = new JTextField();
-						textFieldApellido.setEditable(false);
-						textFieldApellido.setColumns(10);
-						textFieldApellido.setBounds(181, 171, 106, 22);
-						panelInfo.add(textFieldApellido);
-						
-						textFieldSexo = new JTextField();
-						textFieldSexo.setEditable(false);
-						textFieldSexo.setColumns(10);
-						textFieldSexo.setBounds(181, 203, 106, 22);
-						panelInfo.add(textFieldSexo);
-								
-								textFieldAgente = new JTextField();
-								textFieldAgente.setEditable(false);
-								textFieldAgente.setColumns(10);
-								textFieldAgente.setBounds(181, 235, 106, 22);
-								panelInfo.add(textFieldAgente);
-								
-								textFieldArma = new JTextField();
-								textFieldArma.setEditable(false);
-								textFieldArma.setColumns(10);
-								textFieldArma.setBounds(181, 267, 106, 22);
-								panelInfo.add(textFieldArma);
-								
-								textFieldSkinFav = new JTextField();
-								textFieldSkinFav.setEditable(false);
-								textFieldSkinFav.setColumns(10);
-								textFieldSkinFav.setBounds(181, 299, 106, 22);
-								panelInfo.add(textFieldSkinFav);
-								
-										lblFondoLabo = new JLabel("");
-										lblFondoLabo.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/labo.png")));
-										lblFondoLabo.setBounds(0, 0, 1061, 543);
-										panelInfo.add(lblFondoLabo);
 
-		// 2.Delete View
+		tfUsuario = new JTextField(jugador.getUsername());
+		tfUsuario.setEditable(false);
+		tfUsuario.setBounds(181, 105, 126, 22);
+		panelInfo.add(tfUsuario);
+		tfUsuario.setColumns(10);
+
+		tfNombre = new JTextField(jugador.getNombre());
+		tfNombre.setEditable(false);
+		tfNombre.setColumns(10);
+		tfNombre.setBounds(181, 139, 126, 22);
+		panelInfo.add(tfNombre);
+
+		tfApellido = new JTextField(jugador.getApellido());
+		tfApellido.setEditable(false);
+		tfApellido.setColumns(10);
+		tfApellido.setBounds(181, 171, 126, 22);
+		panelInfo.add(tfApellido);
+
+		tfSexo = new JTextField(jugador.getSexo());
+		tfSexo.setEditable(false);
+		tfSexo.setColumns(10);
+		tfSexo.setBounds(181, 203, 126, 22);
+		panelInfo.add(tfSexo);
+
+		tfAgente = new JTextField();
+		tfAgente.setText(coleccion.getAgenteFav());
+		tfAgente.setEditable(false);
+		tfAgente.setColumns(10);
+		tfAgente.setBounds(181, 235, 126, 22);
+		panelInfo.add(tfAgente);
+
+		tfArma = new JTextField();
+		tfArma.setText(coleccion.getArmaFav());
+		tfArma.setEditable(false);
+		tfArma.setColumns(10);
+		tfArma.setBounds(181, 267, 126, 22);
+		panelInfo.add(tfArma);
+
+		tfSkin = new JTextField();
+		tfSkin.setText(coleccion.getSkinFav());
+		tfSkin.setEditable(false);
+		tfSkin.setColumns(10);
+		tfSkin.setBounds(181, 299, 126, 22);
+		panelInfo.add(tfSkin);
+
+		lblFondoInfo = new JLabel("");
+		lblFondoInfo.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondoInfo.png")));
+		lblFondoInfo.setBounds(-373, -47, 1585, 587);
+		panelInfo.add(lblFondoInfo);
+
+		// 2.Colección View
 
 		pestanas.addTab("COLECCIÓN", panelColección);
 		panelColección.setLayout(null);
 
-		JLabel deleteMessage = new JLabel("Bienvenido a tu Colección");
-		deleteMessage.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
-		deleteMessage.setBounds(27, 26, 337, 17);
-		panelColección.add(deleteMessage);
+		lblBienvenidoColec = new JLabel("Bienvenido a tu Colección");
+		lblBienvenidoColec.setFont(new Font("Verdana", Font.BOLD, 24));
+		lblBienvenidoColec.setBounds(10, 11, 356, 34);
+		panelColección.add(lblBienvenidoColec);
 
-		// Pestaña3
-		JLabel agenteImagen = new JLabel("sgdssgfghgf");
-		agenteImagen.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/brocks-removebg-preview.png")));
-		agenteImagen.setBounds(64, 183, 205, 149);
-		panelColección.add(agenteImagen);
-		
-		armaImagen = new JLabel("sgdssgfghgf");
-		armaImagen.setBounds(441, 183, 205, 149);
-		panelColección.add(armaImagen);
-		
-		skinFavImagen = new JLabel("sgdssgfghgf");
-		skinFavImagen.setBounds(831, 183, 205, 149);
-		panelColección.add(skinFavImagen);
-		
 		lblAgenteColec = new JLabel("Agente");
 		lblAgenteColec.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAgenteColec.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblAgenteColec.setBounds(111, 91, 104, 24);
+		lblAgenteColec.setBounds(81, 91, 168, 24);
 		panelColección.add(lblAgenteColec);
-				
-				lblArmaColec = new JLabel("Arma");
-				lblArmaColec.setHorizontalAlignment(SwingConstants.CENTER);
-				lblArmaColec.setFont(new Font("Tahoma", Font.BOLD, 16));
-				lblArmaColec.setBounds(485, 91, 104, 24);
-				panelColección.add(lblArmaColec);
-				
-				lblSkinFavColec = new JLabel("Skin Favorita");
-				lblSkinFavColec.setHorizontalAlignment(SwingConstants.CENTER);
-				lblSkinFavColec.setFont(new Font("Tahoma", Font.BOLD, 16));
-				lblSkinFavColec.setBounds(831, 91, 133, 24);
-				panelColección.add(lblSkinFavColec);
-				
-				JComboBox comboBoxAgente = new JComboBox();
-				comboBoxAgente.setBounds(81, 125, 168, 34);
-				panelColección.add(comboBoxAgente);
-				
-				comboBoxArma = new JComboBox();
-				comboBoxArma.setBounds(456, 125, 168, 34);
-				panelColección.add(comboBoxArma);
-				
-				comboBoxSkinFav = new JComboBox();
-				comboBoxSkinFav.setBounds(824, 125, 168, 34);
-				panelColección.add(comboBoxSkinFav);
-				
-				JButton btnGuardarColec = new JButton("GUARDAR");
-				btnGuardarColec.setFont(new Font("Tahoma", Font.BOLD, 15));
-				btnGuardarColec.setBounds(476, 434, 148, 52);
-				panelColección.add(btnGuardarColec);
-		
-				lblFondo = new JLabel("");
-				lblFondo.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondo2.png")));
-				lblFondo.setBounds(0, 0, 1061, 543);
-				panelColección.add(lblFondo);
+
+		lblArmaColec = new JLabel("Arma");
+		lblArmaColec.setHorizontalAlignment(SwingConstants.CENTER);
+		lblArmaColec.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblArmaColec.setBounds(81, 168, 159, 24);
+		panelColección.add(lblArmaColec);
+
+		lblSkinFavColec = new JLabel("Skin Favorita");
+		lblSkinFavColec.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSkinFavColec.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblSkinFavColec.setBounds(81, 248, 168, 24);
+		panelColección.add(lblSkinFavColec);
+
+		cbAgente = new JComboBox<String>(agentes);
+		cbAgente.setBounds(81, 125, 168, 34);
+		panelColección.add(cbAgente);
+
+		cbArma = new JComboBox<String>(armas);
+		cbArma.setBounds(81, 203, 168, 34);
+		panelColección.add(cbArma);
+
+		cbSkinFav = new JComboBox<String>(skins);
+		cbSkinFav.setBounds(81, 283, 168, 34);
+		panelColección.add(cbSkinFav);
+
+		btnGuardarColec = new JButton("GUARDAR");
+		btnGuardarColec.addActionListener(this);
+		btnGuardarColec.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnGuardarColec.setBounds(772, 192, 148, 52);
+		panelColección.add(btnGuardarColec);
+
+		// modificar view
+		lblFondoColec = new JLabel("");
+		lblFondoColec.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondoColección.jpg")));
+		lblFondoColec.setBounds(-489, 0, 1548, 543);
+		panelColección.add(lblFondoColec);
 		pestanas.addTab("MODIFICAR", panelModificar);
 		panelModificar.setLayout(null);
-		
-				JLabel lblNombreMod = new JLabel("NOMBRE");
-				lblNombreMod.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblNombreMod.setHorizontalAlignment(SwingConstants.LEFT);
-				lblNombreMod.setBounds(151, 137, 86, 14);
-				panelModificar.add(lblNombreMod);
-		
-				JLabel lblApellidoMod = new JLabel("APELLIDO");
-				lblApellidoMod.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblApellidoMod.setHorizontalAlignment(SwingConstants.LEFT);
-				lblApellidoMod.setBounds(151, 168, 86, 14);
-				panelModificar.add(lblApellidoMod);
-		
-				JLabel lblUsuarioMod = new JLabel("USUARIO");
-				lblUsuarioMod.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblUsuarioMod.setHorizontalAlignment(SwingConstants.LEFT);
-				lblUsuarioMod.setBounds(151, 199, 86, 14);
-				panelModificar.add(lblUsuarioMod);
-		
-				JLabel lblContraAcutal = new JLabel("CONTRASEÑA ACTUAL");
-				lblContraAcutal.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblContraAcutal.setHorizontalAlignment(SwingConstants.LEFT);
-				lblContraAcutal.setBounds(151, 230, 149, 14);
-				panelModificar.add(lblContraAcutal);
-		
-				JLabel lblContraNueva = new JLabel("CONTRASEÑA NUEVA");
-				lblContraNueva.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblContraNueva.setHorizontalAlignment(SwingConstants.LEFT);
-				lblContraNueva.setBounds(151, 263, 149, 14);
-				panelModificar.add(lblContraNueva);
-		
-				JLabel lblConfirmarContra = new JLabel("CONFIRMAR CONTRASEÑA");
-				lblConfirmarContra.setFont(new Font("Tahoma", Font.BOLD, 13));
-				lblConfirmarContra.setHorizontalAlignment(SwingConstants.LEFT);
-				lblConfirmarContra.setBounds(151, 292, 178, 14);
-				panelModificar.add(lblConfirmarContra);
-		
-		JLabel lblSexoMod = new JLabel("SEXO");
+
+		lblNombreMod = new JLabel("NOMBRE");
+		lblNombreMod.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblNombreMod.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNombreMod.setBounds(787, 137, 86, 14);
+		panelModificar.add(lblNombreMod);
+
+		lblApellidoMod = new JLabel("APELLIDO");
+		lblApellidoMod.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblApellidoMod.setHorizontalAlignment(SwingConstants.LEFT);
+		lblApellidoMod.setBounds(787, 168, 86, 14);
+		panelModificar.add(lblApellidoMod);
+
+		lblUsuarioMod = new JLabel("USUARIO");
+		lblUsuarioMod.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblUsuarioMod.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUsuarioMod.setBounds(787, 199, 86, 14);
+		panelModificar.add(lblUsuarioMod);
+
+		lblContraNueva = new JLabel("CONTRASEÑA NUEVA");
+		lblContraNueva.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblContraNueva.setHorizontalAlignment(SwingConstants.LEFT);
+		lblContraNueva.setBounds(724, 230, 149, 14);
+		panelModificar.add(lblContraNueva);
+
+		lblConfirmarContra = new JLabel("CONFIRMAR CONTRASEÑA");
+		lblConfirmarContra.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblConfirmarContra.setHorizontalAlignment(SwingConstants.LEFT);
+		lblConfirmarContra.setBounds(689, 266, 178, 14);
+		panelModificar.add(lblConfirmarContra);
+
+		lblSexoMod = new JLabel("SEXO");
 		lblSexoMod.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblSexoMod.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSexoMod.setBounds(151, 326, 53, 14);
+		lblSexoMod.setBounds(689, 303, 53, 14);
 		panelModificar.add(lblSexoMod);
-		
-		textFieldNombreMod = new JTextField();
-		textFieldNombreMod.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldNombreMod.setEnabled(false);
-		textFieldNombreMod.setColumns(10);
-		textFieldNombreMod.setBounds(341, 136, 101, 20);
-		panelModificar.add(textFieldNombreMod);
-		
-				textFieldApellidoMod = new JTextField();
-				textFieldApellidoMod.setHorizontalAlignment(SwingConstants.CENTER);
-				textFieldApellidoMod.setBounds(341, 167, 101, 20);
-				panelModificar.add(textFieldApellidoMod);
-				textFieldApellidoMod.setColumns(10);
-				textFieldApellidoMod.setEnabled(false);
-		
-				textFieldUsuarioMod = new JTextField();
-				textFieldUsuarioMod.setHorizontalAlignment(SwingConstants.CENTER);
-				textFieldUsuarioMod.setColumns(10);
-				textFieldUsuarioMod.setBounds(341, 197, 101, 20);
-				panelModificar.add(textFieldUsuarioMod);
-				textFieldUsuarioMod.setEnabled(false);
-		
-				textFieldContraActualMod = new JTextField();
-				textFieldContraActualMod.setHorizontalAlignment(SwingConstants.CENTER);
-				textFieldContraActualMod.setColumns(10);
-				textFieldContraActualMod.setBounds(341, 227, 101, 20);
-				panelModificar.add(textFieldContraActualMod);
-				textFieldContraActualMod.setEnabled(false);
-		
-		textFieldContraNueva = new JTextField();
-		textFieldContraNueva.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldContraNueva.setEnabled(false);
-		textFieldContraNueva.setColumns(10);
-		textFieldContraNueva.setBounds(341, 262, 101, 20);
-		panelModificar.add(textFieldContraNueva);
 
-		textFieldConfirmarContra = new JTextField();
-		textFieldConfirmarContra.setEditable(false);
-		textFieldConfirmarContra.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldConfirmarContra.setColumns(10);
-		textFieldConfirmarContra.setBounds(341, 291, 101, 20);
-		panelModificar.add(textFieldConfirmarContra);
+		tfNombreMod = new JTextField(jugador.getNombre());
+		tfNombreMod.setHorizontalAlignment(SwingConstants.CENTER);
+		tfNombreMod.setColumns(10);
+		tfNombreMod.setBounds(895, 135, 101, 20);
+		panelModificar.add(tfNombreMod);
+
+		tfApellidoMod = new JTextField(jugador.getApellido());
+		tfApellidoMod.setHorizontalAlignment(SwingConstants.CENTER);
+		tfApellidoMod.setBounds(895, 166, 101, 20);
+		panelModificar.add(tfApellidoMod);
+		tfApellidoMod.setColumns(10);
+
+		tfUsuarioMod = new JTextField(jugador.getUsername());
+		tfUsuarioMod.setEditable(false);
+		tfUsuarioMod.setHorizontalAlignment(SwingConstants.CENTER);
+		tfUsuarioMod.setColumns(10);
+		tfUsuarioMod.setBounds(895, 197, 101, 20);
+		panelModificar.add(tfUsuarioMod);
 
 		btnGuardarMod = new JButton("GUARDAR");
 		btnGuardarMod.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnGuardarMod.addActionListener(this);
-		btnGuardarMod.setBounds(207, 419, 122, 31);
+		btnGuardarMod.setBounds(803, 350, 122, 31);
 		panelModificar.add(btnGuardarMod);
-		textFieldConfirmarContra.setEnabled(false);
 
-		JLabel lblNewLabel = new JLabel("OBHBJHKBJH");
-		lblNewLabel.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/joven.png")));
-		lblNewLabel.setBounds(728, 125, 290, 346);
+		lblNewLabel = new JLabel("OBHBJHKBJH");
+		lblNewLabel.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/clove.jpg")));
+		lblNewLabel.setBounds(-146, 0, 860, 813);
 		panelModificar.add(lblNewLabel);
-		
-		JRadioButton rdbtnMasculino = new JRadioButton("MASCULINO");
-		rdbtnMasculino.setBounds(207, 324, 103, 21);
-		panelModificar.add(rdbtnMasculino);
-		
-		JRadioButton rdbtnFemenino = new JRadioButton("FEMENINO");
-		rdbtnFemenino.setBounds(341, 324, 103, 21);
-		panelModificar.add(rdbtnFemenino);
-		
-		JRadioButton rdbtnOtro = new JRadioButton("OTRO:");
-		rdbtnOtro.setBounds(479, 324, 65, 21);
-		panelModificar.add(rdbtnOtro);
-		
-		textFieldOtro = new JTextField();
-		textFieldOtro.setHorizontalAlignment(SwingConstants.CENTER);
-		textFieldOtro.setEnabled(false);
-		textFieldOtro.setColumns(10);
-		textFieldOtro.setBounds(550, 325, 101, 20);
-		panelModificar.add(textFieldOtro);
-		
-				lblNewLabel_2 = new JLabel("");
-				lblNewLabel_2.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondo3.png")));
-				lblNewLabel_2.setBounds(0, 0, 1061, 543);
-				panelModificar.add(lblNewLabel_2);
 
-		// Pestaña4
+		rdbtnMasculino = new JRadioButton("MASCULINO");
+		rdbtnMasculino.setBounds(748, 301, 103, 21);
+		panelModificar.add(rdbtnMasculino);
+		bgGenero.add(rdbtnMasculino);
+
+		rdbtnFemenino = new JRadioButton("FEMENINO");
+		rdbtnFemenino.setBounds(853, 301, 103, 21);
+		panelModificar.add(rdbtnFemenino);
+		bgGenero.add(rdbtnFemenino);
+
+		rdbtnOtro = new JRadioButton("OTRO");
+		rdbtnOtro.setBounds(958, 301, 65, 21);
+		panelModificar.add(rdbtnOtro);
+		bgGenero.add(rdbtnOtro);
+
+		tfContrasena = new JPasswordField();
+		tfContrasena.setBounds(895, 228, 101, 19);
+		panelModificar.add(tfContrasena);
+
+		tfConfirmarContrasena = new JPasswordField();
+		tfConfirmarContrasena.setBounds(895, 264, 101, 19);
+		panelModificar.add(tfConfirmarContrasena);
+
+		lblFondoMod = new JLabel("");
+		lblFondoMod.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondoModificar1.jpg")));
+		lblFondoMod.setBounds(-810, 0, 1869, 543);
+		panelModificar.add(lblFondoMod);
+
+		// Partidas View
 		pestanas.addTab("PARTIDAS", panelPartidas);
 		panelPartidas.setLayout(null);
 
-		JLabel lblNewLabel_4 = new JLabel("Bienvenido a tu Trayectoria!!");
-		lblNewLabel_4.setForeground(Color.BLACK);
-		lblNewLabel_4.setBackground(new Color(255, 255, 255));
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 18));
-		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setBounds(414, 10, 286, 37);
-		panelPartidas.add(lblNewLabel_4);
-		
-		table = new JTable();
-		table.setBounds(214, 93, 662, 402);
-		panelPartidas.add(table);
-		
-				lblNewLabel_3 = new JLabel("");
-				lblNewLabel_3.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/ashfin.png")));
-				lblNewLabel_3.setBounds(0, 0, 1061, 543);
-				panelPartidas.add(lblNewLabel_3);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(254, 57, 563, 376);
+		panelPartidas.add(scrollPane);
+
+		tableModel2 = new DefaultTableModel();
+		String[] tableHeaders = { "Partida", "Mapa", "Fecha", "Oponente" };
+		tableModel2.setColumnIdentifiers(tableHeaders);
+		table = new JTable(tableModel2);
+		table.setEnabled(true);
+
+		scrollPane.setViewportView(table);
+		table.setVisible(true);
+		scrollPane.setVisible(true);
+
+		JLabel lblBienvenidoPart = new JLabel("Bienvenido a tu Trayectoria!!");
+		lblBienvenidoPart.setForeground(Color.BLACK);
+		lblBienvenidoPart.setBackground(new Color(255, 255, 255));
+		lblBienvenidoPart.setFont(new Font("Segoe UI Black", Font.BOLD, 24));
+		lblBienvenidoPart.setHorizontalAlignment(SwingConstants.LEFT);
+		lblBienvenidoPart.setBounds(55, 0, 493, 37);
+		panelPartidas.add(lblBienvenidoPart);
+
+		lblFondoPart = new JLabel("");
+		lblFondoPart.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/fondoPartida.jpg")));
+		lblFondoPart.setBounds(-516, 0, 1575, 543);
+		panelPartidas.add(lblFondoPart);
 
 		getContentPane().add(pestanas);
-		// Using @param name = null because I want all
-		// trainers to be added and none to be removed
-		
-		// Configuramos la ventana
 
 		setSize(1080, 607);
+
+		dniJugador = jugador.getDni();
+		username = jugador.getUsername();
+
+		verPartidas(datos, dniJugador);
+
 	}
 
-	 @Override
-	    public void actionPerformed(ActionEvent e) {
-	        if (e.getSource() == btnGuardarMod) {
-	            
-	            JOptionPane.showMessageDialog(this, "Los cambios han sido guardados", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
-	        }
-	    }
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource().equals(btnGuardarMod)) {
+			editarDatos(datos);
+		}
+
+		if (e.getSource().equals(btnGuardarColec)) {
+			editarColeccion(datos);
+		}
+
 	}
 
+	private void verPartidas(Controlador datos, String dniJugador) {
+		ArrayList<Partida> partidas = new ArrayList<>();
+		String oponente = null;
+		try {
+			partidas = datos.verPartidas(dniJugador);
+		} catch (CreateException e) {
+			JOptionPane.showMessageDialog(this, "Error al buscar las partidas", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		for (int i = 0; i < partidas.size(); i++) {
+			try {
+				oponente = datos.getOponente(dniJugador, partidas.get(i).getPartida_id(), oponente);
+			} catch (CreateException e) {
+				JOptionPane.showMessageDialog(this, "No se pudo buscar el oponente", "ERROR",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+			Object[] row = new Object[4];
 
+			row[0] = partidas.get(i).getPartida_id();
+			row[1] = partidas.get(i).getMapa();
+			row[2] = partidas.get(i).getFecha();
+			row[3] = oponente;
+			tableModel2.addRow(row);
+		}
+	}
 
+	private void editarDatos(Controlador datos) {
+		if (tfNombre.getText().isBlank() || tfApellido.getText().isBlank() || tfContrasena.getPassword().length == 0
+				|| bgGenero.getSelection() == null) {
+			JOptionPane.showMessageDialog(this, "Rellene todos los campos correctamente para continuar", "INCOMPLETO",
+					JOptionPane.ERROR_MESSAGE);
+		} else if (!Arrays.equals(tfContrasena.getPassword(), tfConfirmarContrasena.getPassword())) {
+			JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden", "INCOMPLETO",
+					JOptionPane.ERROR_MESSAGE);
+		} else {
+			Usuario usuario = new Usuario();
+
+			usuario.setUsername(username);
+			usuario.setDni(dniJugador);
+			usuario.setNombre(tfNombreMod.getText());
+			usuario.setApellido(tfApellidoMod.getText());
+			usuario.setContrasena(new String(tfContrasena.getPassword()));
+			if (rdbtnOtro.isSelected()) {
+				usuario.setSexo("Otro");
+			} else if (rdbtnMasculino.isSelected()) {
+				usuario.setSexo("Hombre");
+			} else {
+				usuario.setSexo("Mujer");
+			}
+			try {
+				datos.modificarJugador(usuario);
+				JOptionPane.showMessageDialog(this, "Jugador modificado correctamente");
+				tfUsuario.setText(username);
+				tfNombre.setText(usuario.getNombre());
+				tfApellido.setText(usuario.getApellido());
+				tfSexo.setText(usuario.getSexo());
+
+			} catch (CreateException e) {
+				JOptionPane.showMessageDialog(this, "No se ha podido modificar", "INCOMPLETO",
+						JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void editarColeccion(Controlador datos) {
+		if (cbAgente.getSelectedIndex() == 0 || cbArma.getSelectedIndex() == 0 || cbSkinFav.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(this, "Rellena todos campos", "INCOMPLETO", JOptionPane.WARNING_MESSAGE);
+		} else {
+			try {
+				coleccion.setAgenteFav((String) cbAgente.getSelectedItem());
+				coleccion.setSkinFav((String) cbSkinFav.getSelectedItem());
+				coleccion.setArmaFav((String) cbArma.getSelectedItem());
+				datos.actualizarColeccion(jugador.getDni(), coleccion);
+				JOptionPane.showMessageDialog(this, "Los cambios han sido guardados", "Confirmación",
+						JOptionPane.INFORMATION_MESSAGE);
+				coleccion = datos.getColeccion(jugador.getDni());
+				tfAgente.setText(coleccion.getAgenteFav());
+				tfArma.setText(coleccion.getArmaFav());
+				tfSkin.setText(coleccion.getSkinFav());
+			} catch (CreateException e) {
+				JOptionPane.showMessageDialog(this, "No se pudo modificar la colección", "INCOMPLETO",
+						JOptionPane.WARNING_MESSAGE);
+				e.printStackTrace();
+			}
+		}
+	}
+}

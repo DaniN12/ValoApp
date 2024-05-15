@@ -16,17 +16,23 @@ public class Controlador implements IControlador {
 
 	// Sentencias SQL
 	final String INSERTjugador = "INSERT INTO Usuario VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
-	final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, Vandal, Default, Astra, ?)";
+	final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, ?, ?, ?, ?)";
 	final String INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)";
 	final String INSERTparticipa = "INSERT INTO Participa VALUES (?, ?)";
 
 	final String UPDATEcoleccion = "UPDATE Coleccion SET armaFav = ?, skinFav = ?, agenteFav = ? WHERE dni_jugador = ?";
-	final String UPDATEesAdmin = "UPDATE Usuario SET esAdmin = 1 WHERE username = ?";
+	final String UPDATEesAdmin = "UPDATE Usuario SET esAdmin = 1 WHERE dni = ?";
 	final String UPDATEpartida = "UPDATE Partida SET mapa = ?, fecha = ? WHERE partida_ID = ?";
+	final String UPDATEjugador = "UPDATE Usuario SET nombre = ?, apellido = ?, contrasena = ?, sexo = ? WHERE dni = ?";
 
 	final String SELECTusuario = "SELECT * FROM Usuario WHERE username = ? AND contrasena = ?";
 	final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
+	final String SELECTpartidasTodo = "SELECT * FROM Partida";
 	final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
+	final String SELECTcoleccion = "{CALL SelectColeccion(?)}";
+	final String SELECToponente = "SELECT ObtenerOponente(?, ?) AS oponente";
+
+	final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
 
 	@Override
 	public Usuario logIn(String user, String contrasena) throws CreateException {
@@ -35,17 +41,8 @@ public class Controlador implements IControlador {
 		ResultSet rs = null;
 		Usuario usuario = null;
 
-		try {
-
-			// Abro la conexióm
-			con = conection.openConnection();
-		} catch (SQLException e1) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Usuario o contraseña incorrectos";
-			CreateException ex = new CreateException(error);
-			throw ex;
-		}
+		// Abro la conexióm
+		con = conection.openConnection();
 
 		try {
 
@@ -94,17 +91,8 @@ public class Controlador implements IControlador {
 					throw ex;
 				}
 			}
-			try {
-
-				// Cierro la conexión
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Usuario o contraseña incorrectos";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión
+			conection.closeConnection(stmt, con);
 		}
 		// devuelve el usuario completo
 		return usuario;
@@ -112,17 +100,8 @@ public class Controlador implements IControlador {
 
 	@Override
 	public void registro(Usuario usuario) throws CreateException {
-		try {
-			// Abrimos la conexión
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al registrar el jugador";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+		// Abrimos la conexión
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(INSERTjugador);
 
@@ -145,37 +124,19 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al registrar el jugador";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
 
 	@Override
-	public void ascender(String username) throws CreateException {
-		try {
-
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al ascender al jugador";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+	public void ascender(String dni) throws CreateException {
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(UPDATEesAdmin);
 
-			stmt.setString(1, username);
+			stmt.setString(1, dni);
 			// Ejecuto la actualización de la base de datos
 			stmt.executeUpdate();
 
@@ -187,33 +148,15 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al ascender al jugador";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
 
 	@Override
 	public void actualizarColeccion(String dni, Coleccion coleccion) throws CreateException {
-		try {
-
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al actualizar la colección";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(UPDATEcoleccion);
 			// UPDATE Coleccion SET armaFav = 1, skinFav = 2, agenteFav = 3 WHERE
@@ -233,35 +176,17 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al actualizar la colección";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
 
 	@Override
 	public void crearPartida(Partida partida) throws CreateException {
+		con = conection.openConnection();
 		try {
-
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al crear la partida";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
-		try {
-			stmt = con.prepareStatement(UPDATEcoleccion);
+			stmt = con.prepareStatement(INSERTpartida);
 			// INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)"
 			stmt.setInt(1, partida.getPartida_id());
 			stmt.setString(2, partida.getMapa());
@@ -277,16 +202,8 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al crear la partida";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
@@ -294,21 +211,14 @@ public class Controlador implements IControlador {
 	@Override
 	public void crearColeccion(String dni) throws CreateException {
 
-		try {
-
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al crear la coleccion";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(INSERTcoleccion);
-
-			stmt.setInt(1, (int) Math.random() * (9999));
+			int id = (int) (Math.random() * (999));
+			stmt.setInt(1, id);
+			stmt.setString(2, "Vandal");
+			stmt.setString(3, "Default");
+			stmt.setString(4, "Astra");
 			stmt.setString(5, dni);
 
 			// Ejecuto la actualización de la base de datos
@@ -322,35 +232,18 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al crear la coleccion";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 	}
 
 	@Override
 	public void asignarJugadoresAPartida(int partida_id, String[] jugadores) throws CreateException {
-		try {
-			// Abrimos la conexión
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al introducir los jugadores";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+		// Abrimos la conexión
+		con = conection.openConnection();
 		try {
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 2; i++) {
 				stmt = con.prepareStatement(INSERTparticipa);
 
 				stmt.setString(1, jugadores[i]);
@@ -367,33 +260,16 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al introducir los jugadores";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
 
 	@Override
 	public void modificarPartida(Partida partida) throws CreateException {
-		try {
-			// Abrimos la conexión
-			con = conection.openConnection();
-		} catch (SQLException e2) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al introducir los jugadores";
-			CreateException ex = new CreateException(error);
-			throw ex;
-
-		}
+		// Abrimos la conexión
+		con = conection.openConnection();
 		try {
 
 			for (int i = 0; i < 10; i++) {
@@ -415,16 +291,8 @@ public class Controlador implements IControlador {
 			throw ex;
 
 		} finally {
-			try {
-				// Cierro la conexión con la base de datos
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al introducir los jugadores";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
 		}
 
 	}
@@ -436,15 +304,7 @@ public class Controlador implements IControlador {
 		Partida p;
 		ArrayList<Partida> ps = new ArrayList<>();
 
-		try {
-			con = conection.openConnection();
-		} catch (SQLException e1) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al buscar las partidas";
-			CreateException ex = new CreateException(error);
-			throw ex;
-		}
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(SELECTpartidas);
 			stmt.setString(1, dni);
@@ -479,15 +339,7 @@ public class Controlador implements IControlador {
 					throw ex;
 				}
 			}
-			try {
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al buscar las partidas";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			conection.closeConnection(stmt, con);
 		}
 
 		return ps;
@@ -499,15 +351,7 @@ public class Controlador implements IControlador {
 		Usuario u;
 		ArrayList<Usuario> jugadores = new ArrayList<>();
 
-		try {
-			con = conection.openConnection();
-		} catch (SQLException e1) {
-
-			System.out.println("Error al abrir la conexión");
-			String error = "Error al buscar los jugadores";
-			CreateException ex = new CreateException(error);
-			throw ex;
-		}
+		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(SELECTjugadores);
 			rs = stmt.executeQuery();
@@ -523,7 +367,7 @@ public class Controlador implements IControlador {
 				u.setSexo(rs.getString("Sexo"));
 				u.setNacimiento(rs.getDate("fecha_nac"));
 				u.setEsAdmin(false);
-				
+
 				jugadores.add(u);
 
 			}
@@ -546,20 +390,187 @@ public class Controlador implements IControlador {
 					throw ex;
 				}
 			}
-			try {
-				conection.closeConnection(stmt, con);
-			} catch (SQLException e) {
-
-				System.out.println("Error al cerrar la conexión");
-				String error = "Error al buscar los jugadores";
-				CreateException ex = new CreateException(error);
-				throw ex;
-			}
+			conection.closeConnection(stmt, con);
 		}
 
 		return jugadores;
 	}
 
+	@Override
+	public void eliminarJugador(String dni) throws CreateException {
+
+		// Abrimos la conexión
+		con = conection.openConnection();
+
+		// Meto los valores del artículo dentro del stmt:
+		try {
+
+			stmt = con.prepareStatement(DELETEjugador);
+			stmt.setString(1, dni);
+
+			// Ejecuto la sentencia
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+
+			System.out.println("Error al ejecutar la query");
+			String error = "Error al banear al jugador";
+			CreateException ex = new CreateException(error);
+			throw ex;
+		} finally {
+			// Cierro la conexión
+			conection.closeConnection(stmt, con);
+		}
+
+	}
+
+	@Override
+	public ArrayList<Partida> verPartidas() throws CreateException {
+		ResultSet rs = null;
+		Partida p;
+		ArrayList<Partida> partidas = new ArrayList<>();
+
+		con = conection.openConnection();
+		try {
+			stmt = con.prepareStatement(SELECTpartidasTodo);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+
+				p = new Partida();
+				p.setFecha(rs.getDate("fecha"));
+				p.setMapa(rs.getString("mapa"));
+				p.setPartida_id(rs.getInt("partida_ID"));
+
+				partidas.add(p);
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("Error al ejecutar la query");
+			String error = "Error al buscar las partidas";
+			CreateException ex = new CreateException(error);
+			throw ex;
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					String error = "Error al buscar las partidas";
+					CreateException ex = new CreateException(error);
+					throw ex;
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+
+		return partidas;
+	}
+
 	
+
+	@Override
+	public void modificarJugador(Usuario usuario) throws CreateException {
+		con = conection.openConnection();
+		try {
+			stmt = con.prepareStatement(UPDATEjugador);
+			// UPDATE Usuario SET nombre = 1, apellido = 2, contrasena = 3, sexo = 4 WHERE
+			// dni = ?
+			stmt.setString(1, usuario.getNombre());
+			stmt.setString(2, usuario.getApellido());
+			stmt.setString(3, usuario.getContrasena());
+			stmt.setString(4, usuario.getSexo());
+			stmt.setString(5, usuario.getDni());
+
+			// Ejecuto la actualización de la base de datos
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+
+			System.out.println("Error al ejecutar la query");
+			String error = "Error al actualizar el jugador";
+			CreateException ex = new CreateException(error);
+			throw ex;
+
+		} finally {
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
+		}
+
+	}
 	
+	@Override
+	public Coleccion getColeccion(String dni) throws CreateException {
+		ResultSet rs = null;
+		Coleccion c = new Coleccion();
+
+		con = conection.openConnection();
+		try {
+			CallableStatement llamarProc = (CallableStatement) this.con.prepareCall(SELECTcoleccion);
+			llamarProc.setString(1, dni);
+			rs = llamarProc.executeQuery();
+
+			while (rs.next()) {
+				c.setArmaFav(rs.getString("arma"));
+				c.setAgenteFav(rs.getString("agente"));
+				c.setColeccion_id(rs.getInt("idCol"));
+				c.setDni_jugador(dni);
+				c.setSkinFav(rs.getString("skin"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar la query");
+			throw new CreateException("Error al obtener la coleccion del usuario");
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					throw new CreateException("Error al cerrar el result set");
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+		return c;
+	}
+
+	@Override
+	public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException {
+		ResultSet rs = null;
+
+		con = conection.openConnection();
+		try {
+			CallableStatement llamarProc = (CallableStatement) this.con.prepareCall(SELECToponente);
+			llamarProc.setString(1, dniJugador);
+			llamarProc.setInt(2, partida_id);;
+			rs = llamarProc.executeQuery();
+
+			while (rs.next()) {
+				oponente = rs.getString("oponente");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar la query");
+			throw new CreateException("Error al obtener al oponente");
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					throw new CreateException("Error al obtener al oponente");
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+		
+		return oponente;
+	}
+
 }
