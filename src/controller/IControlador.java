@@ -34,5 +34,8 @@ public interface IControlador {
     public ArrayList<Usuario> verJugadores() throws CreateException;
 
     public void eliminarJugador(String dni) throws CreateException;
-}
 
+    public void modificarJugador(Usuario usuario) throws CreateException;
+
+    public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException;
+}

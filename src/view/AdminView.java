@@ -22,6 +22,8 @@ import controller.Controlador;
 import excepciones.CreateException;
 import model.Partida;
 import model.Usuario;
+import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class AdminView extends JDialog implements ActionListener {
 
@@ -38,9 +40,6 @@ public class AdminView extends JDialog implements ActionListener {
 	private JPanel panelCrearPartida;
 	private JPanel panelModificar;
 	private JPanel panelAscend;
-	private JLabel lblFondoCrear;
-	private JLabel lblFondo;
-	private JLabel lblFondoAscender;
 	private JLabel lblFondoBaneo;
 	private JLabel lblMapa;
 	private JLabel lblFecha;
@@ -62,6 +61,8 @@ public class AdminView extends JDialog implements ActionListener {
 	private JDateChooser calendarFechaPartida;
 	private JButton btnRevisarAsc;
 	private JTextArea tfInfoAscender;
+	private JLabel lblBienvenido_1;
+	private JLabel lblNewLabel_3;
 
 	/**
 	 * @param loginView
@@ -70,10 +71,9 @@ public class AdminView extends JDialog implements ActionListener {
 
 	// LoginView login dentro del constructor
 	public AdminView(Usuario admin, Controlador datos) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(AdminView.class.getResource("/resources/logoApp.jpg")));
 
 		this.datos = datos;
-
-		panelBaneo = new JPanel();
 		panelCrearPartida = new JPanel();
 		panelCrearPartida.setBackground(new Color(63, 204, 220));
 		panelModificar = new JPanel();
@@ -82,133 +82,103 @@ public class AdminView extends JDialog implements ActionListener {
 		panelAscend.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
-		cbJugadorBan = new JComboBox<String>();
-		cbJugadorBan.setMaximumRowCount(20);
-		cbJugadorBan.setForeground(new Color(0, 0, 0));
-		cbJugadorBan.setBackground(SystemColor.control);
-		cbJugadorBan.setBounds(208, 153, 237, 53);
-		panelBaneo.add(cbJugadorBan);
-
 		cbJugadorAscender = new JComboBox<String>();
-		cbJugadorAscender.setBounds(404, 91, 222, 31);
+		cbJugadorAscender.setBounds(361, 114, 222, 31);
 		cbJugadorAscender.addActionListener(this);
 		panelAscend.add(cbJugadorAscender);
-
-		panelBaneo.setBackground(new Color(192, 192, 192));
-		pestanas.addTab("BANEOS", panelBaneo);
-
-		panelBaneo.setLayout(null);
-
-		btnBanear = new JButton("BANEAR");
-		btnBanear.setBounds(10, 389, 142, 49);
-		panelBaneo.add(btnBanear);
-		btnBanear.addActionListener(this);
-
-		btnRevisarBan = new JButton("REVISAR");
-		btnRevisarBan.setBounds(10, 291, 142, 55);
-		panelBaneo.add(btnRevisarBan);
-		btnRevisarBan.addActionListener(this);
-
-		JLabel labelJugador = new JLabel("Selecciona Jugador:");
-		labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
-		labelJugador.setBounds(10, 150, 175, 53);
-		panelBaneo.add(labelJugador);
 
 		/*
 		 * This one is the TextArean where the players info is going to be shown it is
 		 * an area and not a normal text field because it has to show more than one line
 		 * and a label can not handle it
 		 */
-		tfInformacion = new JTextArea(2, 30);
-		tfInformacion.setBackground(new Color(200, 243, 249));
-		tfInformacion.setEditable(false);
-		tfInformacion.setBounds(188, 286, 280, 175);
-		panelBaneo.add(tfInformacion);
-		btnBanear.setEnabled(false);
-
-		// The JLabel under this comment has no text because a picture is on
-		// this Label
-		JLabel lblImagen = new JLabel("");
-		lblImagen.setBounds(667, 178, 188, 341);
-		panelBaneo.add(lblImagen);
-
-		JLabel lblBienvenido = new JLabel("Bienvenido/a, " + admin.getNombre() + " :)");
-		lblBienvenido.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
-		lblBienvenido.setBounds(24, 30, 294, 28);
-		panelBaneo.add(lblBienvenido);
-
-		lblFondoBaneo = new JLabel("");
-		lblFondoBaneo.setBounds(0, 0, 1061, 543);
-		panelBaneo.add(lblFondoBaneo);
 
 		// 2.Crear partida
 
 		pestanas.addTab("CREAR", panelCrearPartida);
 		panelCrearPartida.setLayout(null);
+		
+		lblBienvenido_1 = new JLabel("Bienvenido/a, " + admin.getNombre());
+		lblBienvenido_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBienvenido_1.setForeground(new Color(255, 255, 255));
+		lblBienvenido_1.setFont(new Font("Segoe UI Black", Font.BOLD, 17));
+		lblBienvenido_1.setBounds(328, 25, 294, 28);
+		panelCrearPartida.add(lblBienvenido_1);
 
-		JLabel lblCrearPartida = new JLabel("Crea una partida");
-		lblCrearPartida.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
-		lblCrearPartida.setBounds(27, 26, 337, 17);
+		JLabel lblCrearPartida = new JLabel("CREA UNA PARTIDA");
+		lblCrearPartida.setForeground(new Color(255, 255, 255));
+		lblCrearPartida.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCrearPartida.setFont(new Font("Segoe UI Black", Font.BOLD, 18));
+		lblCrearPartida.setBounds(296, 185, 337, 17);
 		panelCrearPartida.add(lblCrearPartida);
 
 		lblPartida_ID = new JLabel("Introduce el ID de la Partida");
+		lblPartida_ID.setForeground(new Color(255, 255, 255));
+		lblPartida_ID.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPartida_ID.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblPartida_ID.setBounds(49, 63, 228, 25);
+		lblPartida_ID.setBounds(26, 108, 228, 25);
 		panelCrearPartida.add(lblPartida_ID);
 
 		lblSeleccionaMapa = new JLabel("Selecciona un Mapa");
+		lblSeleccionaMapa.setForeground(new Color(255, 255, 255));
+		lblSeleccionaMapa.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSeleccionaMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblSeleccionaMapa.setBounds(471, 63, 141, 25);
+		lblSeleccionaMapa.setBounds(26, 184, 141, 25);
 		panelCrearPartida.add(lblSeleccionaMapa);
 
 		lblFechaPartida = new JLabel("Selecciona una fecha para la Partida");
+		lblFechaPartida.setForeground(new Color(255, 255, 255));
+		lblFechaPartida.setHorizontalAlignment(SwingConstants.LEFT);
 		lblFechaPartida.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblFechaPartida.setBounds(742, 63, 254, 25);
+		lblFechaPartida.setBounds(26, 251, 254, 25);
 		panelCrearPartida.add(lblFechaPartida);
 
 		calendarFechaPartida = new JDateChooser();
 		calendarFechaPartida.setDateFormatString("dd-MM-yyyy");
-		calendarFechaPartida.setBounds(742, 97, 233, 20);
+		calendarFechaPartida.setBounds(26, 281, 233, 20);
 		panelCrearPartida.add(calendarFechaPartida);
 
 		tfPartida_ID = new JTextField();
-		tfPartida_ID.setBounds(49, 98, 228, 19);
+		tfPartida_ID.setBounds(26, 144, 228, 19);
 		panelCrearPartida.add(tfPartida_ID);
 		tfPartida_ID.setColumns(10);
 
 		cbMapaCrear = new JComboBox<String>(mapas);
-		cbMapaCrear.setBounds(471, 98, 141, 21);
+		cbMapaCrear.setBounds(26, 219, 141, 21);
 		panelCrearPartida.add(cbMapaCrear);
 
 		btnCrear = new JButton("CREAR");
 		btnCrear.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnCrear.setBounds(471, 435, 141, 43);
+		btnCrear.setBounds(396, 381, 141, 43);
 		panelCrearPartida.add(btnCrear);
 		btnCrear.addActionListener(this);
 
 		JLabel lblEquipo1 = new JLabel("EQUIPO 1");
+		lblEquipo1.setForeground(new Color(255, 255, 255));
 		lblEquipo1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEquipo1.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEquipo1.setBounds(49, 184, 228, 25);
+		lblEquipo1.setBounds(691, 108, 228, 25);
 		panelCrearPartida.add(lblEquipo1);
 
 		JLabel lblEquipo2 = new JLabel("EQUIPO 2");
+		lblEquipo2.setForeground(new Color(255, 255, 255));
 		lblEquipo2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEquipo2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEquipo2.setBounds(768, 191, 228, 25);
+		lblEquipo2.setBounds(691, 184, 228, 25);
 		panelCrearPartida.add(lblEquipo2);
 
 		cbJugadorEq1 = new JComboBox<String>();
-		cbJugadorEq1.setBounds(97, 219, 141, 21);
+		cbJugadorEq1.setBounds(735, 144, 141, 21);
 		panelCrearPartida.add(cbJugadorEq1);
 
 		cbJugadorEq2 = new JComboBox<String>();
-		cbJugadorEq2.setBounds(804, 219, 141, 21);
+		cbJugadorEq2.setBounds(735, 219, 141, 21);
 		panelCrearPartida.add(cbJugadorEq2);
-
-		lblFondoCrear = new JLabel("");
-		lblFondoCrear.setBounds(0, 0, 1061, 543);
-		panelCrearPartida.add(lblFondoCrear);
+		
+		lblNewLabel_3 = new JLabel("");
+		lblNewLabel_3.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoCrear1.jpg")));
+		lblNewLabel_3.setBounds(-497, -24, 1487, 760);
+		panelCrearPartida.add(lblNewLabel_3);
 		pestanas.addTab("MODIFICAR", panelModificar);
 		panelModificar.setLayout(null);
 
@@ -218,18 +188,21 @@ public class AdminView extends JDialog implements ActionListener {
 		panelModificar.add(calendarModificar);
 
 		JLabel lblPartidaModificar = new JLabel("PARTIDA A MODIFICAR");
+		lblPartidaModificar.setForeground(new Color(255, 255, 255));
 		lblPartidaModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblPartidaModificar.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPartidaModificar.setBounds(40, 135, 173, 14);
 		panelModificar.add(lblPartidaModificar);
 
 		lblMapa = new JLabel("MAPA");
+		lblMapa.setForeground(new Color(255, 255, 255));
 		lblMapa.setHorizontalAlignment(SwingConstants.LEFT);
 		lblMapa.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblMapa.setBounds(40, 201, 62, 14);
 		panelModificar.add(lblMapa);
 
 		lblFecha = new JLabel("FECHA");
+		lblFecha.setForeground(new Color(255, 255, 255));
 		lblFecha.setHorizontalAlignment(SwingConstants.LEFT);
 		lblFecha.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblFecha.setBounds(40, 260, 62, 14);
@@ -247,15 +220,18 @@ public class AdminView extends JDialog implements ActionListener {
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnModificar.setBounds(206, 364, 125, 44);
 		panelModificar.add(btnModificar);
+		
+		JLabel lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(AdminView.class.getResource("/resources/neon.png")));
+		lblNewLabel_2.setForeground(new Color(255, 255, 255));
+		lblNewLabel_2.setBounds(463, -22, 545, 811);
+		panelModificar.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoModificar.jpg")));
+		lblNewLabel_1.setBounds(0, 0, 961, 542);
+		panelModificar.add(lblNewLabel_1);
 		btnModificar.addActionListener(this);
-
-		JLabel lblImagenModificar = new JLabel("vguhgvhjg");
-		lblImagenModificar.setBounds(728, 125, 290, 346);
-		panelModificar.add(lblImagenModificar);
-
-		lblFondo = new JLabel("ahbd");
-		lblFondo.setBounds(0, 0, 1061, 543);
-		panelModificar.add(lblFondo);
 
 		// PestaÃ±a4
 		pestanas.addTab("ASCENDER", panelAscend);
@@ -266,12 +242,12 @@ public class AdminView extends JDialog implements ActionListener {
 		lblSelecJugadorAscender.setBackground(new Color(255, 255, 255));
 		lblSelecJugadorAscender.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblSelecJugadorAscender.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSelecJugadorAscender.setBounds(424, 56, 180, 25);
+		lblSelecJugadorAscender.setBounds(389, 78, 180, 25);
 		panelAscend.add(lblSelecJugadorAscender);
 
 		btnAscender = new JButton("ASCENDER");
 		btnAscender.addActionListener(this);
-		btnAscender.setBounds(446, 368, 122, 69);
+		btnAscender.setBounds(487, 375, 142, 55);
 		panelAscend.add(btnAscender);
 		btnAscender.setEnabled(false);
 		btnAscender.addActionListener(this);
@@ -279,25 +255,68 @@ public class AdminView extends JDialog implements ActionListener {
 		tfInfoAscender = new JTextArea(2, 30);
 		tfInfoAscender.setEditable(false);
 		tfInfoAscender.setBackground(new Color(200, 243, 249));
-		tfInfoAscender.setBounds(372, 157, 280, 175);
+		tfInfoAscender.setBounds(335, 156, 280, 175);
 		panelAscend.add(tfInfoAscender);
 
-		lblFondoAscender = new JLabel("");
-		lblFondoAscender.setBounds(0, 0, 1061, 543);
-		panelAscend.add(lblFondoAscender);
-
 		btnRevisarAsc = new JButton("REVISAR");
-		btnRevisarAsc.setBounds(191, 221, 142, 55);
+		btnRevisarAsc.setBounds(323, 375, 142, 55);
 		panelAscend.add(btnRevisarAsc);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoAscender2.jpg")));
+		lblNewLabel.setBounds(-485, 0, 1513, 543);
+		panelAscend.add(lblNewLabel);
 		btnRevisarAsc.addActionListener(this);
 
 		getContentPane().add(pestanas);
+		
+				panelBaneo = new JPanel();
+				
+						cbJugadorBan = new JComboBox<String>();
+						cbJugadorBan.setMaximumRowCount(20);
+						cbJugadorBan.setForeground(new Color(0, 0, 0));
+						cbJugadorBan.setBackground(SystemColor.control);
+						cbJugadorBan.setBounds(121, 128, 237, 53);
+						panelBaneo.add(cbJugadorBan);
+						
+								panelBaneo.setBackground(new Color(192, 192, 192));
+								pestanas.addTab("BANEOS", panelBaneo);
+								
+										panelBaneo.setLayout(null);
+										
+												btnBanear = new JButton("BANEAR");
+												btnBanear.setBounds(241, 192, 142, 55);
+												panelBaneo.add(btnBanear);
+												btnBanear.addActionListener(this);
+												
+														btnRevisarBan = new JButton("REVISAR");
+														btnRevisarBan.setBounds(89, 192, 142, 55);
+														panelBaneo.add(btnRevisarBan);
+														btnRevisarBan.addActionListener(this);
+														
+																JLabel labelJugador = new JLabel("Selecciona Jugador:");
+																labelJugador.setHorizontalAlignment(SwingConstants.CENTER);
+																labelJugador.setForeground(new Color(255, 255, 255));
+																labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
+																labelJugador.setBounds(121, 64, 237, 53);
+																panelBaneo.add(labelJugador);
+																tfInformacion = new JTextArea(2, 30);
+																tfInformacion.setBackground(new Color(200, 243, 249));
+																tfInformacion.setEditable(false);
+																tfInformacion.setBounds(637, 65, 280, 175);
+																panelBaneo.add(tfInformacion);
+																btnBanear.setEnabled(false);
+																				
+																						lblFondoBaneo = new JLabel("");
+																						lblFondoBaneo.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoBan.jpg")));
+																						lblFondoBaneo.setBounds(-242, 0, 1201, 759);
+																						panelBaneo.add(lblFondoBaneo);
 		// Using @param name = null because I want all
 		// players to be added and none to be removed
 
 		// Configuramos la ventana
 
-		setSize(1080, 607);
+		setSize(980, 606);
 
 		cargarJugadores(datos);
 		cargarPartidas(datos);
@@ -461,7 +480,7 @@ public class AdminView extends JDialog implements ActionListener {
 
 		try {
 			if (tfPartida_ID.getText().isEmpty() || cbMapaCrear.getSelectedIndex() == 0
-					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == -1
+					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == -1 || calendarFechaPartida.getDate() == null
 					|| calendarFechaPartida.getDate().before(fechaActual)) {
 				JOptionPane.showMessageDialog(this, "Introduce todos los datos correctamente", "FATAL ERROR",
 						JOptionPane.WARNING_MESSAGE);
@@ -487,6 +506,7 @@ public class AdminView extends JDialog implements ActionListener {
 
 				calendarFechaPartida.cleanup();
 				limpiarCrearPartida();
+				cargarPartidas(datos);
 				JOptionPane.showMessageDialog(this, "Partida creada correctamente");
 			}
 
@@ -521,9 +541,10 @@ public class AdminView extends JDialog implements ActionListener {
 			java.sql.Date date = new java.sql.Date(calendarModificar.getDate().toInstant().toEpochMilli());
 			partida.setFecha(date);
 			partida.setMapa((String) cbMapaMod.getSelectedItem());
-			JOptionPane.showMessageDialog(this, "Partida modificada correctamente");
 			try {
 				datos.modificarPartida(partida);
+				JOptionPane.showMessageDialog(this, "Partida modificada correctamente");
+				cargarPartidas(datos);
 			} catch (CreateException e) {
 				JOptionPane.showMessageDialog(this, "No se ha podido modificar la partida", "FATAL ERROR",
 						JOptionPane.WARNING_MESSAGE);

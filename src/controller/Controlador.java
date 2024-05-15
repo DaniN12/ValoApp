@@ -16,21 +16,23 @@ public class Controlador implements IControlador {
 
 	// Sentencias SQL
 	final String INSERTjugador = "INSERT INTO Usuario VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
-	final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, Vandal, Default, Astra, ?)";
+	final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, ?, ?, ?, ?)";
 	final String INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)";
 	final String INSERTparticipa = "INSERT INTO Participa VALUES (?, ?)";
 
 	final String UPDATEcoleccion = "UPDATE Coleccion SET armaFav = ?, skinFav = ?, agenteFav = ? WHERE dni_jugador = ?";
 	final String UPDATEesAdmin = "UPDATE Usuario SET esAdmin = 1 WHERE dni = ?";
 	final String UPDATEpartida = "UPDATE Partida SET mapa = ?, fecha = ? WHERE partida_ID = ?";
+	final String UPDATEjugador = "UPDATE Usuario SET nombre = ?, apellido = ?, contrasena = ?, sexo = ? WHERE dni = ?";
 
 	final String SELECTusuario = "SELECT * FROM Usuario WHERE username = ? AND contrasena = ?";
 	final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
 	final String SELECTpartidasTodo = "SELECT * FROM Partida";
 	final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
 	final String SELECTcoleccion = "SELECT * FROM Coleccion WHERE dni_jugador = ?";
+	final String SELECToponente = "select username from Usuario u, Participa p WHERE p.dni = u.dni AND p.dni != ? AND p.partida_ID = ?";
 
-	final String DELETEjugador = "DELETE FROM Usuario WHERE dni_jugador = ?";
+	final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
 
 	@Override
 	public Usuario logIn(String user, String contrasena) throws CreateException {
@@ -184,7 +186,7 @@ public class Controlador implements IControlador {
 	public void crearPartida(Partida partida) throws CreateException {
 		con = conection.openConnection();
 		try {
-			stmt = con.prepareStatement(UPDATEcoleccion);
+			stmt = con.prepareStatement(INSERTpartida);
 			// INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)"
 			stmt.setInt(1, partida.getPartida_id());
 			stmt.setString(2, partida.getMapa());
@@ -212,8 +214,11 @@ public class Controlador implements IControlador {
 		con = conection.openConnection();
 		try {
 			stmt = con.prepareStatement(INSERTcoleccion);
-
-			stmt.setInt(1, (int) Math.random() * (9999));
+			int id = (int) (Math.random() * (999));
+			stmt.setInt(1, id);
+			stmt.setString(2, "Vandal");
+			stmt.setString(3, "Default");
+			stmt.setString(4, "Astra");
 			stmt.setString(5, dni);
 
 			// Ejecuto la actualización de la base de datos
@@ -238,7 +243,7 @@ public class Controlador implements IControlador {
 		con = conection.openConnection();
 		try {
 
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < 2; i++) {
 				stmt = con.prepareStatement(INSERTparticipa);
 
 				stmt.setString(1, jugadores[i]);
@@ -401,7 +406,6 @@ public class Controlador implements IControlador {
 		try {
 
 			stmt = con.prepareStatement(DELETEjugador);
-			System.out.println(dni);
 			stmt.setString(1, dni);
 
 			// Ejecuto la sentencia
@@ -481,7 +485,7 @@ public class Controlador implements IControlador {
 				c.setArmaFav(rs.getString("armaFav"));
 				c.setAgenteFav(rs.getString("agenteFav"));
 				c.setColeccion_id(rs.getInt("coleccion_ID"));
-				c.setDni_Jugadror(dni);
+				c.setDni_jugador(dni);
 				c.setSkinFav(rs.getString("skinFav"));
 			}
 
@@ -503,5 +507,68 @@ public class Controlador implements IControlador {
 		return c;
 	}
 
-}
+	@Override
+	public void modificarJugador(Usuario usuario) throws CreateException {
+		con = conection.openConnection();
+		try {
+			stmt = con.prepareStatement(UPDATEjugador);
+			// UPDATE Usuario SET nombre = 1, apellido = 2, contrasena = 3, sexo = 4 WHERE
+			// dni = ?
+			stmt.setString(1, usuario.getNombre());
+			stmt.setString(2, usuario.getApellido());
+			stmt.setString(3, usuario.getContrasena());
+			stmt.setString(4, usuario.getSexo());
+			stmt.setString(5, usuario.getDni());
 
+			// Ejecuto la actualización de la base de datos
+			stmt.executeUpdate();
+
+		} catch (SQLException e1) {
+
+			System.out.println("Error al ejecutar la query");
+			String error = "Error al actualizar el jugador";
+			CreateException ex = new CreateException(error);
+			throw ex;
+
+		} finally {
+			// Cierro la conexión con la base de datos
+			conection.closeConnection(stmt, con);
+		}
+
+	}
+
+	@Override
+	public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException {
+		ResultSet rs = null;
+
+		con = conection.openConnection();
+		try {
+			stmt = con.prepareStatement(SELECToponente);
+			stmt.setString(1, dniJugador);
+			stmt.setInt(2, partida_id);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				oponente = rs.getString("username");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar la query");
+			throw new CreateException("Error al obtener la coleccion del usuario");
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					throw new CreateException("Error al cerrar el result set");
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+		
+		return oponente;
+	}
+
+}
