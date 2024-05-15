@@ -105,9 +105,10 @@ public class JugadorView extends JDialog implements ActionListener {
 	private String dniJugador;
 	private String username;
 
-	public JugadorView(Usuario jugador, Controlador datos) {
+	public JugadorView(LoginView loginView, boolean b, Usuario jugador, Controlador datos) {
+		super(loginView);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(JugadorView.class.getResource("/resources/logoApp.jpg")));
-
+		setModal(b);
 		this.datos = datos;
 		this.jugador = jugador;
 		try {
@@ -405,8 +406,8 @@ public class JugadorView extends JDialog implements ActionListener {
 		lblBienvenidoPart.setForeground(Color.BLACK);
 		lblBienvenidoPart.setBackground(new Color(255, 255, 255));
 		lblBienvenidoPart.setFont(new Font("Segoe UI Black", Font.BOLD, 24));
-		lblBienvenidoPart.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBienvenidoPart.setBounds(55, 0, 360, 37);
+		lblBienvenidoPart.setHorizontalAlignment(SwingConstants.LEFT);
+		lblBienvenidoPart.setBounds(55, 0, 493, 37);
 		panelPartidas.add(lblBienvenidoPart);
 
 		lblFondoPart = new JLabel("");

@@ -41,13 +41,17 @@ public class RegistroView extends JFrame implements ActionListener {
 	private JRadioButton rbMujer;
 	private JRadioButton rbOtro;
 	private JDateChooser calendarNacimiento;
+	private JLabel lblContraseaNueva;
+	private JLabel lblConfirmarContra;
+	private JLabel lblSexo;
+	private JLabel lblFecha_nac;
+	private JLabel lblDNI;
 
 	public RegistroView(Controlador datos) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroView.class.getResource("/resources/logoApp.jpg")));
-
 		this.datos = datos;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 969, 541);
+
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(0, 0, 0));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -55,75 +59,55 @@ public class RegistroView extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBackground(new Color(255, 255, 255));
-		lblNombre.setBounds(175, 125, 45, 13);
-		contentPane.add(lblNombre);
-
-		JLabel lblApellido = new JLabel("Apellido: ");
-		lblApellido.setBounds(175, 155, 45, 13);
-		contentPane.add(lblApellido);
-
-		JLabel lblUsuario = new JLabel("Usuario: ");
-		lblUsuario.setBounds(175, 185, 45, 13);
-		contentPane.add(lblUsuario);
-
-		JLabel lblContrasena = new JLabel("Contraseña: ");
-		lblContrasena.setBounds(161, 209, 86, 13);
-		contentPane.add(lblContrasena);
-
-		JLabel lblDni = new JLabel("DNI: ");
-		lblDni.setBounds(679, 209, 102, 13);
-		contentPane.add(lblDni);
-
-		JLabel lblConfirmarContrasena = new JLabel("Confirmar contraseña: ");
-		lblConfirmarContrasena.setBounds(161, 236, 118, 13);
-		contentPane.add(lblConfirmarContrasena);
-
 		tfNombre = new JTextField();
+		tfNombre.setToolTipText("Nombre");
 		tfNombre.setBounds(151, 121, 96, 19);
 		contentPane.add(tfNombre);
 		tfNombre.setColumns(10);
 
 		tfApellido = new JTextField();
+		tfApellido.setToolTipText("Apellido");
 		tfApellido.setColumns(10);
 		tfApellido.setBounds(151, 151, 96, 19);
 		contentPane.add(tfApellido);
 
 		tfUsuario = new JTextField();
+		tfUsuario.setToolTipText("Usuario");
 		tfUsuario.setColumns(10);
 		tfUsuario.setBounds(151, 179, 96, 19);
 		contentPane.add(tfUsuario);
 
 		tfDni = new JTextField();
 		tfDni.setColumns(10);
-		tfDni.setBounds(679, 205, 96, 19);
+		tfDni.setBounds(679, 205, 109, 19);
 		contentPane.add(tfDni);
 
 		tfContrasena = new JPasswordField();
-		tfContrasena.setBounds(155, 207, 89, 16);
+		tfContrasena.setToolTipText("Contraseña");
+		tfContrasena.setBounds(192, 208, 96, 16);
 		contentPane.add(tfContrasena);
 
 		tfConfirmarContrasena = new JPasswordField();
-		tfConfirmarContrasena.setBounds(155, 234, 89, 16);
+		tfConfirmarContrasena.setToolTipText("Confirmar contraseña");
+		tfConfirmarContrasena.setBounds(192, 246, 96, 16);
 		contentPane.add(tfConfirmarContrasena);
 
 		rbHombre = new JRadioButton("HOMBRE");
-		rbHombre.setBounds(633, 151, 71, 21);
+		rbHombre.setBounds(608, 151, 96, 21);
 		contentPane.add(rbHombre);
 		bgGenero.add(rbHombre);
 
 		rbMujer = new JRadioButton("MUJER");
-		rbMujer.setBounds(706, 151, 59, 21);
+		rbMujer.setBounds(706, 151, 82, 21);
 		contentPane.add(rbMujer);
 		bgGenero.add(rbMujer);
 
-		rbOtro = new JRadioButton("Otro");
-		rbOtro.setBounds(767, 151, 50, 21);
+		rbOtro = new JRadioButton("OTRO");
+		rbOtro.setBounds(790, 151, 71, 21);
 		contentPane.add(rbOtro);
 		bgGenero.add(rbOtro);
 
-		btnRegistro = new JButton("Registrarme");
+		btnRegistro = new JButton("REGISTRARME");
 		btnRegistro.setBounds(387, 304, 146, 45);
 		contentPane.add(btnRegistro);
 		btnRegistro.addActionListener(this);
@@ -145,6 +129,56 @@ public class RegistroView extends JFrame implements ActionListener {
 		lblRegstrese.setFont(new Font("Tahoma", Font.BOLD, 24));
 		lblRegstrese.setBounds(0, 44, 315, 45);
 		contentPane.add(lblRegstrese);
+		
+		JLabel lblUsuario = new JLabel("Usuario:");
+		lblUsuario.setForeground(Color.WHITE);
+		lblUsuario.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblUsuario.setBounds(83, 176, 96, 21);
+		contentPane.add(lblUsuario);
+		
+		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setForeground(Color.WHITE);
+		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNombre.setBounds(83, 118, 96, 21);
+		contentPane.add(lblNombre);
+		
+		JLabel lblApellido = new JLabel("Apellido:");
+		lblApellido.setForeground(Color.WHITE);
+		lblApellido.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblApellido.setBounds(83, 150, 96, 21);
+		contentPane.add(lblApellido);
+		
+		lblContraseaNueva = new JLabel("CONTRASEÑA:");
+		lblContraseaNueva.setForeground(new Color(255, 255, 255));
+		lblContraseaNueva.setHorizontalAlignment(SwingConstants.LEFT);
+		lblContraseaNueva.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblContraseaNueva.setBounds(97, 209, 149, 14);
+		contentPane.add(lblContraseaNueva);
+		
+		lblConfirmarContra = new JLabel("CONFIRMAR CONTRASEÑA:");
+		lblConfirmarContra.setForeground(new Color(255, 255, 255));
+		lblConfirmarContra.setHorizontalAlignment(SwingConstants.LEFT);
+		lblConfirmarContra.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblConfirmarContra.setBounds(15, 246, 223, 14);
+		contentPane.add(lblConfirmarContra);
+		
+		lblSexo = new JLabel("Sexo:");
+		lblSexo.setForeground(Color.WHITE);
+		lblSexo.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblSexo.setBounds(564, 151, 96, 21);
+		contentPane.add(lblSexo);
+		
+		lblFecha_nac = new JLabel("Fecha de nacimiento:");
+		lblFecha_nac.setForeground(Color.WHITE);
+		lblFecha_nac.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblFecha_nac.setBounds(528, 176, 185, 21);
+		contentPane.add(lblFecha_nac);
+		
+		lblDNI = new JLabel("DNI:");
+		lblDNI.setForeground(Color.WHITE);
+		lblDNI.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDNI.setBounds(641, 202, 96, 21);
+		contentPane.add(lblDNI);
 		
 		JLabel lblFondo = new JLabel("");
 		lblFondo.setIcon(new ImageIcon(RegistroView.class.getResource("/resources/fondoRegistro.jpg")));
@@ -196,7 +230,9 @@ public class RegistroView extends JFrame implements ActionListener {
 				datos.crearColeccion(usuario.getDni());
 				JOptionPane.showMessageDialog(this, "Jugador registrado correctamente");
 				this.dispose();
-				JugadorView jv = new JugadorView(usuario, datos);
+				LoginView lv = new LoginView(datos);
+				lv.setVisible(true);
+				JugadorView jv = new JugadorView(lv, true, usuario, datos);
 				jv.setVisible(true);
 			} catch (CreateException e) {
 				JOptionPane.showMessageDialog(this, "No se ha podido registrar", "INCOMPLETO",

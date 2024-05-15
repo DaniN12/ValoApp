@@ -29,8 +29,8 @@ public class Controlador implements IControlador {
 	final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
 	final String SELECTpartidasTodo = "SELECT * FROM Partida";
 	final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
-	final String SELECTcoleccion = "SELECT * FROM Coleccion WHERE dni_jugador = ?";
-	final String SELECToponente = "select username from Usuario u, Participa p WHERE p.dni = u.dni AND p.dni != ? AND p.partida_ID = ?";
+	final String SELECTcoleccion = "{CALL SelectColeccion(?)}";
+	final String SELECToponente = "SELECT ObtenerOponente(?, ?) AS oponente";
 
 	final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
 
@@ -470,42 +470,7 @@ public class Controlador implements IControlador {
 		return partidas;
 	}
 
-	@Override
-	public Coleccion getColeccion(String dni) throws CreateException {
-		ResultSet rs = null;
-		Coleccion c = new Coleccion();
-
-		con = conection.openConnection();
-		try {
-			stmt = con.prepareStatement(SELECTcoleccion);
-			stmt.setString(1, dni);
-			rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				c.setArmaFav(rs.getString("armaFav"));
-				c.setAgenteFav(rs.getString("agenteFav"));
-				c.setColeccion_id(rs.getInt("coleccion_ID"));
-				c.setDni_jugador(dni);
-				c.setSkinFav(rs.getString("skinFav"));
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error al ejecutar la query");
-			throw new CreateException("Error al obtener la coleccion del usuario");
-		} finally {
-			// Cerramos ResultSet
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					System.out.println("Error al cerrar ResultSet");
-					throw new CreateException("Error al cerrar el result set");
-				}
-			}
-			conection.closeConnection(stmt, con);
-		}
-		return c;
-	}
+	
 
 	@Override
 	public void modificarJugador(Usuario usuario) throws CreateException {
@@ -536,20 +501,24 @@ public class Controlador implements IControlador {
 		}
 
 	}
-
+	
 	@Override
-	public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException {
+	public Coleccion getColeccion(String dni) throws CreateException {
 		ResultSet rs = null;
+		Coleccion c = new Coleccion();
 
 		con = conection.openConnection();
 		try {
-			stmt = con.prepareStatement(SELECToponente);
-			stmt.setString(1, dniJugador);
-			stmt.setInt(2, partida_id);
-			rs = stmt.executeQuery();
+			CallableStatement llamarProc = (CallableStatement) this.con.prepareCall(SELECTcoleccion);
+			llamarProc.setString(1, dni);
+			rs = llamarProc.executeQuery();
 
 			while (rs.next()) {
-				oponente = rs.getString("username");
+				c.setArmaFav(rs.getString("arma"));
+				c.setAgenteFav(rs.getString("agente"));
+				c.setColeccion_id(rs.getInt("idCol"));
+				c.setDni_jugador(dni);
+				c.setSkinFav(rs.getString("skin"));
 			}
 
 		} catch (SQLException e) {
@@ -563,6 +532,39 @@ public class Controlador implements IControlador {
 				} catch (SQLException e) {
 					System.out.println("Error al cerrar ResultSet");
 					throw new CreateException("Error al cerrar el result set");
+				}
+			}
+			conection.closeConnection(stmt, con);
+		}
+		return c;
+	}
+
+	@Override
+	public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException {
+		ResultSet rs = null;
+
+		con = conection.openConnection();
+		try {
+			CallableStatement llamarProc = (CallableStatement) this.con.prepareCall(SELECToponente);
+			llamarProc.setString(1, dniJugador);
+			llamarProc.setInt(2, partida_id);;
+			rs = llamarProc.executeQuery();
+
+			while (rs.next()) {
+				oponente = rs.getString("oponente");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al ejecutar la query");
+			throw new CreateException("Error al obtener al oponente");
+		} finally {
+			// Cerramos ResultSet
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					System.out.println("Error al cerrar ResultSet");
+					throw new CreateException("Error al obtener al oponente");
 				}
 			}
 			conection.closeConnection(stmt, con);

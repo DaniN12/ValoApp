@@ -65,14 +65,17 @@ public class AdminView extends JDialog implements ActionListener {
 	private JLabel lblNewLabel_3;
 
 	/**
+	 * @param b 
+	 * @param loginView 
 	 * @param loginView
 	 * @param loggedProf
 	 */
 
 	// LoginView login dentro del constructor
-	public AdminView(Usuario admin, Controlador datos) {
+	public AdminView(LoginView loginView, boolean b, Usuario admin, Controlador datos) {
+		super(loginView);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AdminView.class.getResource("/resources/logoApp.jpg")));
-
+		setModal(b);
 		this.datos = datos;
 		panelCrearPartida = new JPanel();
 		panelCrearPartida.setBackground(new Color(63, 204, 220));

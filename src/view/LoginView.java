@@ -12,7 +12,6 @@ import javax.swing.border.EmptyBorder;
 import controller.Controlador;
 import excepciones.CreateException;
 import model.Usuario;
-import java.awt.Font;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
@@ -39,10 +38,10 @@ public class LoginView extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-				textFieldUsuario = new JTextField();
-				textFieldUsuario.setBounds(32, 129, 183, 30);
-				contentPane.add(textFieldUsuario);
-				textFieldUsuario.setColumns(10);
+		textFieldUsuario = new JTextField();
+		textFieldUsuario.setBounds(32, 129, 183, 30);
+		contentPane.add(textFieldUsuario);
+		textFieldUsuario.setColumns(10);
 
 		btnLogin = new JButton("LogIn");
 		btnLogin.setBounds(60, 389, 122, 30);
@@ -69,6 +68,7 @@ public class LoginView extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnRegistrarse)) {
+			this.dispose();;
 			RegistroView registroView = new RegistroView(datos);
 			registroView.setVisible(true);
 		}
@@ -99,13 +99,11 @@ public class LoginView extends JFrame implements ActionListener {
 
 		} else {
 
-			this.dispose();
-
 			if (user.isEsAdmin()) {
-				AdminView av = new AdminView(user, datos);
+				AdminView av = new AdminView(this, true, user, datos);
 				av.setVisible(true);
 			} else {
-				JugadorView jv = new JugadorView(user, datos);
+				JugadorView jv = new JugadorView(this, true, user, datos);
 				jv.setVisible(true);
 			}
 
