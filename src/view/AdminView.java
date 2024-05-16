@@ -1,3 +1,10 @@
+/**
+ * AdminView es una clase que representa la interfaz gráfica de usuario
+ * para la administración de partidas, jugadores y acciones de moderación
+ * en la aplicación.
+ * Extiende JDialog e implementa ActionListener para manejar eventos de botones.
+ */
+
 package view;
 
 import java.awt.Color;
@@ -64,14 +71,14 @@ public class AdminView extends JDialog implements ActionListener {
 	private JLabel lblBienvenido_1;
 	private JLabel lblNewLabel_3;
 
-	/**
-	 * @param b
-	 * @param loginView
-	 * @param loginView
-	 * @param loggedProf
-	 */
-
-	// LoginView login dentro del constructor
+	 /**
+     * Constructor de la clase AdminView.
+     *
+     * @param loginView Vista de inicio de sesión desde la cual se abre esta ventana.
+     * @param b          Booleano que indica si el diálogo es modal o no.
+     * @param admin      Usuario administrador que ha iniciado sesión.
+     * @param datos      Controlador que proporciona acceso a los datos del sistema.
+     */
 	public AdminView(LoginView loginView, boolean b, Usuario admin, Controlador datos) {
 		super(loginView);
 		setTitle("ValoApp");
@@ -90,12 +97,6 @@ public class AdminView extends JDialog implements ActionListener {
 		cbJugadorAscender.setBounds(361, 114, 222, 31);
 		cbJugadorAscender.addActionListener(this);
 		panelAscend.add(cbJugadorAscender);
-
-		/*
-		 * This one is the TextArean where the players info is going to be shown it is
-		 * an area and not a normal text field because it has to show more than one line
-		 * and a label can not handle it
-		 */
 
 		// 2.Crear partida
 
@@ -315,8 +316,7 @@ public class AdminView extends JDialog implements ActionListener {
 		lblFondoBaneo.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoBan.jpg")));
 		lblFondoBaneo.setBounds(-242, 0, 1201, 759);
 		panelBaneo.add(lblFondoBaneo);
-		// Using @param name = null because I want all
-		// players to be added and none to be removed
+		
 
 		// Configuramos la ventana
 
@@ -412,6 +412,10 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+	 * Muestra la información del jugador seleccionado para ascender y habilita el botón de ascender si se ha seleccionado un jugador válido.
+	 */
+	
 	private void revisarJugadorAscender() {
 		if (cbJugadorAscender.getSelectedIndex() == -1) {
 			JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
@@ -428,6 +432,10 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+	 * Muestra la información del jugador seleccionado para banear y habilita el botón de banear si se ha seleccionado un jugador válido.
+	 */
+	
 	private void revisarJugadorBan() {
 		if (cbJugadorBan.getSelectedIndex() == -1) {
 			JOptionPane.showMessageDialog(this, "Selecciona un jugador", "FATAL ERROR", JOptionPane.WARNING_MESSAGE);
@@ -444,6 +452,12 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+	 * Banea al jugador seleccionado.
+	 *
+	 * @param datos Controlador que proporciona acceso a los datos del sistema.
+	 */
+	
 	private void banear(Controlador datos) {
 		int pos = cbJugadorBan.getSelectedIndex();
 
@@ -460,6 +474,12 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 
 	}
+	
+	/**
+	 * Asciende al jugador seleccionado.
+	 *
+	 * @param datos Controlador que proporciona acceso a los datos del sistema.
+	 */
 
 	private void ascenderJugador(Controlador datos) {
 		int pos = cbJugadorAscender.getSelectedIndex();
@@ -484,6 +504,12 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 
 	}
+	
+	/**
+	 * Crea una nueva partida con los datos proporcionados por el usuario.
+	 *
+	 * @param datos Controlador que proporciona acceso a los datos del sistema.
+	 */
 
 	private void crearPartida(Controlador datos) {
 		Date fechaActual = new Date();
@@ -530,6 +556,10 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 
 	}
+	
+	/**
+	 * Limpia los campos del panel de creación de partidas.
+	 */
 
 	private void limpiarCrearPartida() {
 		tfPartida_ID.setText("");
@@ -537,6 +567,12 @@ public class AdminView extends JDialog implements ActionListener {
 		cbJugadorEq1.setSelectedIndex(-1);
 		cbJugadorEq2.setSelectedIndex(-1);
 	}
+	
+	/**
+	 * Modifica la información de la partida seleccionada.
+	 *
+	 * @param datos Controlador que proporciona acceso a los datos del sistema.
+	 */
 
 	private void modificarPartida(Controlador datos) {
 		Date fechaActual = new Date();
