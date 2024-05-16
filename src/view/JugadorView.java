@@ -1,3 +1,9 @@
+/**
+ * Esta clase representa la vista del jugador en la aplicación. Proporciona una interfaz gráfica
+ * para que el usuario pueda ver y modificar su información, así como su colección de elementos y sus
+ * partidas registradas.
+ */
+
 package view;
 
 import java.awt.Color;
@@ -34,8 +40,8 @@ import javax.swing.ImageIcon;
 
 public class JugadorView extends JDialog implements ActionListener {
 	/**
-	 * 
-	 */
+     * Serial version UID
+     */
 	private static final long serialVersionUID = 1L;
 	private Usuario jugador;
 	private Coleccion coleccion;
@@ -105,8 +111,18 @@ public class JugadorView extends JDialog implements ActionListener {
 	private String dniJugador;
 	private String username;
 
+	 /**
+     * Constructor de la clase JugadorView.
+     * 
+     * @param loginView La vista de inicio de sesión.
+     * @param b         Booleano que indica si el diálogo es modal o no.
+     * @param jugador   El usuario actual.
+     * @param datos     El controlador de datos.
+     */
+	
 	public JugadorView(LoginView loginView, boolean b, Usuario jugador, Controlador datos) {
 		super(loginView);
+		setTitle("ValoApp");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(JugadorView.class.getResource("/resources/logoApp.jpg")));
 		setModal(b);
 		this.datos = datos;
@@ -131,8 +147,7 @@ public class JugadorView extends JDialog implements ActionListener {
 
 		panelInfo.setLayout(null);
 
-		// The JLabel under this comment has no text because the picture of Oak is on
-		// this Label
+		
 		lblIimagen = new JLabel("");
 		lblIimagen.setIcon(new ImageIcon(JugadorView.class.getResource("/resources/sage.png")));
 		lblIimagen.setBounds(392, -46, 627, 975);
@@ -425,6 +440,12 @@ public class JugadorView extends JDialog implements ActionListener {
 		verPartidas(datos, dniJugador);
 
 	}
+	
+	/**
+     * Maneja los eventos de los botones.
+     * 
+     * @param e Objeto ActionEvent que representa el evento que ocurrió.
+     */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -438,6 +459,13 @@ public class JugadorView extends JDialog implements ActionListener {
 		}
 
 	}
+	
+	/**
+     * Método para mostrar las partidas del jugador.
+     * 
+     * @param datos     El controlador de datos.
+     * @param dniJugador El DNI del jugador.
+     */
 
 	private void verPartidas(Controlador datos, String dniJugador) {
 		ArrayList<Partida> partidas = new ArrayList<>();
@@ -467,6 +495,12 @@ public class JugadorView extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+     * Método para editar los datos del jugador.
+     * 
+     * @param datos El controlador de datos.
+     */
+	
 	private void editarDatos(Controlador datos) {
 		if (tfNombre.getText().isBlank() || tfApellido.getText().isBlank() || tfContrasena.getPassword().length == 0
 				|| bgGenero.getSelection() == null) {
@@ -505,6 +539,12 @@ public class JugadorView extends JDialog implements ActionListener {
 			}
 		}
 	}
+	
+	/**
+     * Método para editar la colección del jugador.
+     * 
+     * @param datos El controlador de datos.
+     */
 
 	private void editarColeccion(Controlador datos) {
 		if (cbAgente.getSelectedIndex() == 0 || cbArma.getSelectedIndex() == 0 || cbSkinFav.getSelectedIndex() == 0) {
@@ -529,3 +569,4 @@ public class JugadorView extends JDialog implements ActionListener {
 		}
 	}
 }
+

@@ -65,8 +65,8 @@ public class AdminView extends JDialog implements ActionListener {
 	private JLabel lblNewLabel_3;
 
 	/**
-	 * @param b 
-	 * @param loginView 
+	 * @param b
+	 * @param loginView
 	 * @param loginView
 	 * @param loggedProf
 	 */
@@ -74,6 +74,7 @@ public class AdminView extends JDialog implements ActionListener {
 	// LoginView login dentro del constructor
 	public AdminView(LoginView loginView, boolean b, Usuario admin, Controlador datos) {
 		super(loginView);
+		setTitle("ValoApp");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AdminView.class.getResource("/resources/logoApp.jpg")));
 		setModal(b);
 		this.datos = datos;
@@ -100,7 +101,7 @@ public class AdminView extends JDialog implements ActionListener {
 
 		pestanas.addTab("CREAR", panelCrearPartida);
 		panelCrearPartida.setLayout(null);
-		
+
 		lblBienvenido_1 = new JLabel("Bienvenido/a, " + admin.getNombre());
 		lblBienvenido_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBienvenido_1.setForeground(new Color(255, 255, 255));
@@ -177,7 +178,7 @@ public class AdminView extends JDialog implements ActionListener {
 		cbJugadorEq2 = new JComboBox<String>();
 		cbJugadorEq2.setBounds(735, 219, 141, 21);
 		panelCrearPartida.add(cbJugadorEq2);
-		
+
 		lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoCrear1.jpg")));
 		lblNewLabel_3.setBounds(-497, -24, 1487, 760);
@@ -223,13 +224,13 @@ public class AdminView extends JDialog implements ActionListener {
 		btnModificar.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnModificar.setBounds(206, 364, 125, 44);
 		panelModificar.add(btnModificar);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(AdminView.class.getResource("/resources/neon.png")));
 		lblNewLabel_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2.setBounds(463, -22, 545, 811);
 		panelModificar.add(lblNewLabel_2);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoModificar.jpg")));
 		lblNewLabel_1.setBounds(0, 0, 961, 542);
@@ -264,7 +265,7 @@ public class AdminView extends JDialog implements ActionListener {
 		btnRevisarAsc = new JButton("REVISAR");
 		btnRevisarAsc.setBounds(323, 375, 142, 55);
 		panelAscend.add(btnRevisarAsc);
-		
+
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoAscender2.jpg")));
 		lblNewLabel.setBounds(-485, 0, 1513, 543);
@@ -272,48 +273,48 @@ public class AdminView extends JDialog implements ActionListener {
 		btnRevisarAsc.addActionListener(this);
 
 		getContentPane().add(pestanas);
-		
-				panelBaneo = new JPanel();
-				
-						cbJugadorBan = new JComboBox<String>();
-						cbJugadorBan.setMaximumRowCount(20);
-						cbJugadorBan.setForeground(new Color(0, 0, 0));
-						cbJugadorBan.setBackground(SystemColor.control);
-						cbJugadorBan.setBounds(121, 128, 237, 53);
-						panelBaneo.add(cbJugadorBan);
-						
-								panelBaneo.setBackground(new Color(192, 192, 192));
-								pestanas.addTab("BANEOS", panelBaneo);
-								
-										panelBaneo.setLayout(null);
-										
-												btnBanear = new JButton("BANEAR");
-												btnBanear.setBounds(241, 192, 142, 55);
-												panelBaneo.add(btnBanear);
-												btnBanear.addActionListener(this);
-												
-														btnRevisarBan = new JButton("REVISAR");
-														btnRevisarBan.setBounds(89, 192, 142, 55);
-														panelBaneo.add(btnRevisarBan);
-														btnRevisarBan.addActionListener(this);
-														
-																JLabel labelJugador = new JLabel("Selecciona Jugador:");
-																labelJugador.setHorizontalAlignment(SwingConstants.CENTER);
-																labelJugador.setForeground(new Color(255, 255, 255));
-																labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
-																labelJugador.setBounds(121, 64, 237, 53);
-																panelBaneo.add(labelJugador);
-																tfInformacion = new JTextArea(2, 30);
-																tfInformacion.setBackground(new Color(200, 243, 249));
-																tfInformacion.setEditable(false);
-																tfInformacion.setBounds(637, 65, 280, 175);
-																panelBaneo.add(tfInformacion);
-																btnBanear.setEnabled(false);
-																				
-																						lblFondoBaneo = new JLabel("");
-																						lblFondoBaneo.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoBan.jpg")));
-																						lblFondoBaneo.setBounds(-242, 0, 1201, 759);
-																						panelBaneo.add(lblFondoBaneo);
+
+		panelBaneo = new JPanel();
+
+		cbJugadorBan = new JComboBox<String>();
+		cbJugadorBan.setMaximumRowCount(20);
+		cbJugadorBan.setForeground(new Color(0, 0, 0));
+		cbJugadorBan.setBackground(SystemColor.control);
+		cbJugadorBan.setBounds(121, 128, 237, 53);
+		panelBaneo.add(cbJugadorBan);
+
+		panelBaneo.setBackground(new Color(192, 192, 192));
+		pestanas.addTab("BANEOS", panelBaneo);
+
+		panelBaneo.setLayout(null);
+
+		btnBanear = new JButton("BANEAR");
+		btnBanear.setBounds(241, 192, 142, 55);
+		panelBaneo.add(btnBanear);
+		btnBanear.addActionListener(this);
+
+		btnRevisarBan = new JButton("REVISAR");
+		btnRevisarBan.setBounds(89, 192, 142, 55);
+		panelBaneo.add(btnRevisarBan);
+		btnRevisarBan.addActionListener(this);
+
+		JLabel labelJugador = new JLabel("Selecciona Jugador:");
+		labelJugador.setHorizontalAlignment(SwingConstants.CENTER);
+		labelJugador.setForeground(new Color(255, 255, 255));
+		labelJugador.setFont(new Font("Yu Gothic UI Semibold", Font.BOLD, 24));
+		labelJugador.setBounds(121, 64, 237, 53);
+		panelBaneo.add(labelJugador);
+		tfInformacion = new JTextArea(2, 30);
+		tfInformacion.setBackground(new Color(200, 243, 249));
+		tfInformacion.setEditable(false);
+		tfInformacion.setBounds(637, 65, 280, 175);
+		panelBaneo.add(tfInformacion);
+		btnBanear.setEnabled(false);
+
+		lblFondoBaneo = new JLabel("");
+		lblFondoBaneo.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoBan.jpg")));
+		lblFondoBaneo.setBounds(-242, 0, 1201, 759);
+		panelBaneo.add(lblFondoBaneo);
 		// Using @param name = null because I want all
 		// players to be added and none to be removed
 
@@ -382,6 +383,12 @@ public class AdminView extends JDialog implements ActionListener {
 		}
 
 	}
+	
+	/**
+     * Maneja los eventos de los botones.
+     * 
+     * @param e Objeto ActionEvent que representa el evento que ocurrió.
+     */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -483,8 +490,8 @@ public class AdminView extends JDialog implements ActionListener {
 
 		try {
 			if (tfPartida_ID.getText().isEmpty() || cbMapaCrear.getSelectedIndex() == 0
-					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == -1 || calendarFechaPartida.getDate() == null
-					|| calendarFechaPartida.getDate().before(fechaActual)) {
+					|| cbJugadorEq1.getSelectedIndex() == -1 || cbJugadorEq2.getSelectedIndex() == -1
+					|| calendarFechaPartida.getDate() == null || calendarFechaPartida.getDate().before(fechaActual)) {
 				JOptionPane.showMessageDialog(this, "Introduce todos los datos correctamente", "FATAL ERROR",
 						JOptionPane.WARNING_MESSAGE);
 			} else if (cbJugadorEq1.getSelectedIndex() == cbJugadorEq2.getSelectedIndex()) {

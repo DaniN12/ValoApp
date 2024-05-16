@@ -1,3 +1,16 @@
+/**
+ * Esta clase representa la vista de registro de nuevos usuarios en la aplicación.
+ * Proporciona una interfaz gráfica para que los usuarios ingresen sus datos personales y de cuenta.
+ * Los usuarios deben completar varios campos, incluidos nombre, apellido, usuario, contraseña, género, fecha de nacimiento y DNI.
+ * 
+ * La vista contiene campos de texto, campos de contraseña, botones de opción para seleccionar el género, un selector de fecha de nacimiento y un botón para registrar la cuenta.
+ * Cuando un usuario intenta registrarse, se validan los datos ingresados.
+ * Si todos los campos están completos y la contraseña y su confirmación coinciden, se crea una nueva cuenta de usuario en el sistema.
+ * Si hay algún error en los datos ingresados o en el proceso de registro, se muestran mensajes de error correspondientes.
+ * 
+ * Esta clase implementa la interfaz ActionListener para manejar eventos de botones.
+ */
+
 package view;
 
 import java.awt.event.ActionEvent;
@@ -24,6 +37,12 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+/**
+ * Constructor de la clase RegistroView.
+ * 
+ * @param datos Objeto Controlador que proporciona acceso a los datos y métodos necesarios.
+ */
+
 public class RegistroView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -48,6 +67,7 @@ public class RegistroView extends JFrame implements ActionListener {
 	private JLabel lblDNI;
 
 	public RegistroView(Controlador datos) {
+		setTitle("ValoApp");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroView.class.getResource("/resources/logoApp.jpg")));
 		this.datos = datos;
 		setBounds(100, 100, 969, 541);
@@ -185,6 +205,12 @@ public class RegistroView extends JFrame implements ActionListener {
 		lblFondo.setBounds(-488, 0, 1506, 739);
 		contentPane.add(lblFondo);
 	}
+	
+	/**
+     * Maneja los eventos de los botones.
+     * 
+     * @param e Objeto ActionEvent que representa el evento que ocurrió.
+     */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -193,6 +219,12 @@ public class RegistroView extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+     * Método para manejar el proceso de registro de un nuevo usuario.
+     * 
+     * @param datos Objeto Controlador que proporciona acceso a los datos y métodos necesarios.
+     */
+	
 	private void registro(Controlador datos) {
 		Date fechaActual = new Date();
 

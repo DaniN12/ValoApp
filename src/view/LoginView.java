@@ -1,3 +1,17 @@
+/**
+ * Esta clase representa la vista de inicio de sesión de la aplicación.
+ * Proporciona una interfaz gráfica para que los usuarios ingresen sus credenciales.
+ * Los usuarios pueden iniciar sesión con un nombre de usuario y una contraseña o registrarse como nuevos usuarios.
+ * 
+ * La vista contiene campos de texto para ingresar el nombre de usuario y la contraseña, así como botones para iniciar sesión y registrarse.
+ * Cuando un usuario intenta iniciar sesión, se verifica la validez de las credenciales proporcionadas.
+ * Si las credenciales son válidas y el usuario es administrador, se abre la vista de administrador.
+ * Si las credenciales son válidas y el usuario es un jugador regular, se abre la vista de jugador.
+ * Si las credenciales no son válidas, se muestra un mensaje de error.
+ * 
+ * Esta clase implementa la interfaz ActionListener para manejar eventos de botones.
+ */
+
 package view;
 
 import java.awt.event.ActionEvent;
@@ -16,6 +30,12 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 
+/**
+ * Constructor de la clase LoginView.
+ * 
+ * @param datos Objeto Controlador que proporciona acceso a los datos y métodos necesarios.
+ */
+
 public class LoginView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -26,6 +46,7 @@ public class LoginView extends JFrame implements ActionListener {
 	private Controlador datos;
 
 	public LoginView(Controlador datos) {
+		setTitle("ValoApp");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/resources/logoApp.jpg")));
 
 		this.datos = datos;
@@ -64,6 +85,12 @@ public class LoginView extends JFrame implements ActionListener {
 		contentPane.add(lblNewLabel);
 
 	}
+	
+	/**
+     * Maneja los eventos de los botones.
+     * 
+     * @param e Objeto ActionEvent que representa el evento que ocurrió.
+     */
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -77,6 +104,12 @@ public class LoginView extends JFrame implements ActionListener {
 			login(datos);
 		}
 	}
+	
+	/**
+     * Método para manejar el inicio de sesión.
+     * 
+     * @param datos Objeto Controlador que proporciona acceso a los datos y métodos necesarios.
+     */
 
 	private void login(Controlador datos) {
 		// Nombre del usuario, se mete en txtFieldUsuario
