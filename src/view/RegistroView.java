@@ -17,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Date;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import com.toedter.calendar.JDateChooser;
@@ -31,6 +30,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.awt.Color;
@@ -43,7 +43,7 @@ import javax.swing.SwingConstants;
  * @param datos Objeto Controlador que proporciona acceso a los datos y métodos necesarios.
  */
 
-public class RegistroView extends JFrame implements ActionListener {
+public class RegistroView extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -66,7 +66,9 @@ public class RegistroView extends JFrame implements ActionListener {
 	private JLabel lblFecha_nac;
 	private JLabel lblDNI;
 
-	public RegistroView(Controlador datos) {
+	public RegistroView(LoginView loginView, boolean b, Controlador datos) {
+		super(loginView);
+		setModal(b);
 		setTitle("ValoApp");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroView.class.getResource("/resources/logoApp.jpg")));
 		this.datos = datos;
@@ -263,7 +265,6 @@ public class RegistroView extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(this, "Jugador registrado correctamente");
 				this.dispose();
 				LoginView lv = new LoginView(datos);
-				lv.setVisible(true);
 				JugadorView jv = new JugadorView(lv, true, usuario, datos);
 				jv.setVisible(true);
 			} catch (CreateException e) {

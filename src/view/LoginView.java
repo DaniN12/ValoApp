@@ -95,8 +95,7 @@ public class LoginView extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnRegistrarse)) {
-			this.dispose();;
-			RegistroView registroView = new RegistroView(datos);
+			RegistroView registroView = new RegistroView(this, true, datos);
 			registroView.setVisible(true);
 		}
 
