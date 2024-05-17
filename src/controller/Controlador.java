@@ -1,39 +1,49 @@
 package controller;
 
-import java.sql.*;
-import java.util.ArrayList;
-
+import excepciones.CreateException;
 import model.Coleccion;
 import model.Partida;
 import model.Usuario;
-import excepciones.CreateException;
+import java.util.ArrayList;
+import java.sql.*;
 
+/**
+ * Clase que implementa la interfaz IControlador y proporciona las funcionalidades del controlador del sistema.
+ */
 public class Controlador implements IControlador {
 
-	private Connection con;
-	private PreparedStatement stmt;
-	private ConnectionOpenClose conection = new ConnectionOpenClose();
+    private Connection con;
+    private PreparedStatement stmt;
+    private ConnectionOpenClose conection = new ConnectionOpenClose();
 
-	// Sentencias SQL
-	final String INSERTjugador = "INSERT INTO Usuario VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
-	final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, ?, ?, ?, ?)";
-	final String INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)";
-	final String INSERTparticipa = "INSERT INTO Participa VALUES (?, ?)";
+    // Sentencias SQL
+    final String INSERTjugador = "INSERT INTO Usuario VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
+    final String INSERTcoleccion = "INSERT INTO Coleccion VALUES (?, ?, ?, ?, ?)";
+    final String INSERTpartida = "INSERT INTO Partida VALUES (?, ?, ?)";
+    final String INSERTparticipa = "INSERT INTO Participa VALUES (?, ?)";
 
-	final String UPDATEcoleccion = "UPDATE Coleccion SET armaFav = ?, skinFav = ?, agenteFav = ? WHERE dni_jugador = ?";
-	final String UPDATEesAdmin = "UPDATE Usuario SET esAdmin = 1 WHERE dni = ?";
-	final String UPDATEpartida = "UPDATE Partida SET mapa = ?, fecha = ? WHERE partida_ID = ?";
-	final String UPDATEjugador = "UPDATE Usuario SET nombre = ?, apellido = ?, contrasena = ?, sexo = ? WHERE dni = ?";
+    final String UPDATEcoleccion = "UPDATE Coleccion SET armaFav = ?, skinFav = ?, agenteFav = ? WHERE dni_jugador = ?";
+    final String UPDATEesAdmin = "UPDATE Usuario SET esAdmin = 1 WHERE dni = ?";
+    final String UPDATEpartida = "UPDATE Partida SET mapa = ?, fecha = ? WHERE partida_ID = ?";
+    final String UPDATEjugador = "UPDATE Usuario SET nombre = ?, apellido = ?, contrasena = ?, sexo = ? WHERE dni = ?";
 
-	final String SELECTusuario = "SELECT * FROM Usuario WHERE username = ? AND contrasena = ?";
-	final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
-	final String SELECTpartidasTodo = "SELECT * FROM Partida";
-	final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
-	final String SELECTcoleccion = "{CALL SelectColeccion(?)}";
-	final String SELECToponente = "SELECT ObtenerOponente(?, ?) AS oponente";
+    final String SELECTusuario = "SELECT * FROM Usuario WHERE username = ? AND contrasena = ?";
+    final String SELECTpartidas = "SELECT pa.partida_ID, mapa, fecha FROM Partida pa, Participa pp, Usuario u WHERE pa.partida_ID = pp.partida_ID AND u.dni = pp.dni AND u.dni = ?";
+    final String SELECTpartidasTodo = "SELECT * FROM Partida";
+    final String SELECTjugadores = "SELECT * FROM Usuario WHERE esAdmin = 0";
+    final String SELECTcoleccion = "{CALL SelectColeccion(?)}";
+    final String SELECToponente = "SELECT ObtenerOponente(?, ?) AS oponente";
 
-	final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
+    final String DELETEjugador = "DELETE FROM Usuario WHERE dni = ?";
 
+    /**
+     * Realiza el inicio de sesión de un usuario.
+     *
+     * @param user       Nombre de usuario.
+     * @param contrasena Contraseña del usuario.
+     * @return El usuario que inició sesión.
+     * @throws CreateException Si ocurre un error durante el inicio de sesión.
+     */
 	@Override
 	public Usuario logIn(String user, String contrasena) throws CreateException {
 
@@ -97,6 +107,13 @@ public class Controlador implements IControlador {
 		// devuelve el usuario completo
 		return usuario;
 	}
+	
+	/**
+     * Registra un nuevo usuario en el sistema.
+     *
+     * @param usuario El usuario a registrar.
+     * @throws CreateException Si ocurre un error durante el registro.
+     */
 
 	@Override
 	public void registro(Usuario usuario) throws CreateException {
@@ -130,6 +147,13 @@ public class Controlador implements IControlador {
 
 	}
 
+	/**
+     * Asciende a un usuario.
+     *
+     * @param dni DNI del usuario.
+     * @throws CreateException Si ocurre un error durante la operación de ascenso.
+     */
+	
 	@Override
 	public void ascender(String dni) throws CreateException {
 		con = conection.openConnection();
@@ -153,6 +177,14 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Actualiza la colección de un usuario.
+     *
+     * @param dni       DNI del usuario.
+     * @param coleccion La colección actualizada.
+     * @throws CreateException Si ocurre un error durante la actualización de la colección.
+     */
 
 	@Override
 	public void actualizarColeccion(String dni, Coleccion coleccion) throws CreateException {
@@ -181,6 +213,13 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Crea una nueva partida.
+     *
+     * @param partida La partida a crear.
+     * @throws CreateException Si ocurre un error durante la creación de la partida.
+     */
 
 	@Override
 	public void crearPartida(Partida partida) throws CreateException {
@@ -207,6 +246,13 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Crea una nueva colección para un usuario.
+     *
+     * @param dni DNI del usuario.
+     * @throws CreateException Si ocurre un error durante la creación de la colección.
+     */
 
 	@Override
 	public void crearColeccion(String dni) throws CreateException {
@@ -236,6 +282,14 @@ public class Controlador implements IControlador {
 			conection.closeConnection(stmt, con);
 		}
 	}
+	
+	/**
+     * Asigna jugadores a una partida.
+     *
+     * @param partida_id    ID de la partida.
+     * @param jugadores_dni Array de DNI de los jugadores.
+     * @throws CreateException Si ocurre un error durante la asignación de jugadores.
+     */
 
 	@Override
 	public void asignarJugadoresAPartida(int partida_id, String[] jugadores) throws CreateException {
@@ -265,6 +319,13 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	 /**
+     * Modifica una partida existente.
+     *
+     * @param partida La partida modificada.
+     * @throws CreateException Si ocurre un error durante la modificación de la partida.
+     */
 
 	@Override
 	public void modificarPartida(Partida partida) throws CreateException {
@@ -296,6 +357,14 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Obtiene las partidas de un usuario.
+     *
+     * @param dni DNI del usuario.
+     * @return Una lista de partidas del usuario.
+     * @throws CreateException Si ocurre un error al obtener las partidas.
+     */
 
 	@Override
 	public ArrayList<Partida> verPartidas(String dni) throws CreateException {
@@ -345,6 +414,13 @@ public class Controlador implements IControlador {
 		return ps;
 	}
 
+	 /**
+     * Obtiene todos los jugadores registrados en el sistema.
+     *
+     * @return Una lista de todos los jugadores.
+     * @throws CreateException Si ocurre un error al obtener los jugadores.
+     */
+	
 	@Override
 	public ArrayList<Usuario> verJugadores() throws CreateException {
 		ResultSet rs = null;
@@ -395,6 +471,13 @@ public class Controlador implements IControlador {
 
 		return jugadores;
 	}
+	
+	/**
+     * Elimina un jugador del sistema.
+     *
+     * @param dni DNI del jugador a eliminar.
+     * @throws CreateException Si ocurre un error durante la eliminación del jugador.
+     */
 
 	@Override
 	public void eliminarJugador(String dni) throws CreateException {
@@ -423,6 +506,13 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Obtiene todas las partidas.
+     *
+     * @return Una lista de todas las partidas.
+     * @throws CreateException Si ocurre un error al obtener las partidas.
+     */
 
 	@Override
 	public ArrayList<Partida> verPartidas() throws CreateException {
@@ -470,7 +560,12 @@ public class Controlador implements IControlador {
 		return partidas;
 	}
 
-	
+	/**
+     * Modifica la información de un jugador.
+     *
+     * @param usuario El jugador con la información modificada.
+     * @throws CreateException Si ocurre un error durante la modificación del jugador.
+     */
 
 	@Override
 	public void modificarJugador(Usuario usuario) throws CreateException {
@@ -501,6 +596,14 @@ public class Controlador implements IControlador {
 		}
 
 	}
+	
+	/**
+     * Obtiene la colección de un usuario.
+     *
+     * @param dni DNI del usuario.
+     * @return La colección del usuario.
+     * @throws CreateException Si ocurre un error al obtener la colección.
+     */
 	
 	@Override
 	public Coleccion getColeccion(String dni) throws CreateException {
@@ -539,6 +642,16 @@ public class Controlador implements IControlador {
 		return c;
 	}
 
+	/**
+     * Obtiene el oponente de un jugador en una partida.
+     *
+     * @param dniJugador DNI del jugador.
+     * @param partida_id ID de la partida.
+     * @param oponente   DNI del oponente.
+     * @return El DNI del oponente del jugador en la partida especificada.
+     * @throws CreateException Si ocurre un error al obtener el oponente.
+     */
+	
 	@Override
 	public String getOponente(String dniJugador, int partida_id, String oponente) throws CreateException {
 		ResultSet rs = null;
