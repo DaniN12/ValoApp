@@ -234,7 +234,7 @@ public class AdminView extends JDialog implements ActionListener {
 
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(AdminView.class.getResource("/resources/fondoModificar.jpg")));
-		lblNewLabel_1.setBounds(0, 0, 961, 542);
+		lblNewLabel_1.setBounds(0, 0, 1621, 542);
 		panelModificar.add(lblNewLabel_1);
 		btnModificar.addActionListener(this);
 
